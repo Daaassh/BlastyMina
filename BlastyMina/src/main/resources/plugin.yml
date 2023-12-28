@@ -1,0 +1,9 @@
+name: BlastyMina
+version: '${project.version}'
+main: org.me.blastymina.BlastyMina
+depend: [ ProtocolLib ]
+commands:
+  mina:
+    description: a
+  minaadm:
+    description: bc
