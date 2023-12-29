@@ -13,19 +13,23 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BlockIterator;
 import org.me.blastymina.BlastyMina;
+import org.me.blastymina.api.TitleAPI;
+import org.me.blastymina.utils.rewards.EnchantsRewardsManager;
 
 public class LaserEnchant {
-    public Player p;
+    private Player p;
+    private TitleAPI api = new TitleAPI();
     ProtocolManager manager = BlastyMina.getManager();
 
     public LaserEnchant(Player p) {
         this.p = p;
-        this.packetSend();
+        packetSend();
     }
 
-    public void packetSend() {
+    private void packetSend() {
         int blocks = 0;
-        BlockIterator blockIterator = new BlockIterator(p, 15);
+        int distance = BlastyMina.getPlugin(BlastyMina.class).getConfig().getInt("mina.enchants.laser.distance");
+        BlockIterator blockIterator = new BlockIterator(p, distance);
         
         while (blockIterator.hasNext()) {
             Block currentBlock = blockIterator.next();
@@ -39,12 +43,14 @@ public class LaserEnchant {
             try {
                 manager.sendServerPacket(p, packet);
                 ++blocks;
+                new EnchantsRewardsManager(p, blocks, "laser");
             } catch (Exception e) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Laser ]" + ChatColor.RED + "Erro ao enviar o pacote do jogador " + p.getName() + ".");
             }
         }
 
-        p.sendMessage(ChatColor.RED + "Laser ativado, foram quebrados " + blocks + " blocos");
+        api.sendFullTitle(p, 1, 1, 2, ChatColor.YELLOW + "Britadeira", "Ativado foram quebrados " + blocks + " blocos");
+
     }
 }
 

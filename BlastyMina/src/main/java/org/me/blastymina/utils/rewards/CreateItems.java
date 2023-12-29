@@ -37,7 +37,7 @@ public class CreateItems {
 
                 if (manager.setup()) {
                     createItemFromConfig(section, itemName);
-                    api.sendFullTitle(player, 5,5,5,ChatColor.YELLOW + "Recompensas", "Você recebeu uma recompensa");
+                    api.sendFullTitle(player, 1,1,2,ChatColor.YELLOW + "Recompensas", "Você recebeu uma recompensa");
                 }
             }
         }

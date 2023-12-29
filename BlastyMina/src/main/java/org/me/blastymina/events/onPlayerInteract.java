@@ -19,7 +19,7 @@ implements Listener {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Player p2 = e.getPlayer();
             if (p2.getItemInHand().getType() == Material.GOLD_PICKAXE) {
-                new RaioEnchant(p2, e.getClickedBlock());
+                new LaserEnchant(p2);
             }
         } else if (e.getAction() == Action.LEFT_CLICK_BLOCK && (p = e.getPlayer()).getItemInHand().getType() == Material.GOLD_PICKAXE) {
             new BritadeiraEnchant(p, e.getClickedBlock());

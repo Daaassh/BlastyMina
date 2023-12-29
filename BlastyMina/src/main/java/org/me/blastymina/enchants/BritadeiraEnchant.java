@@ -12,14 +12,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.me.blastymina.BlastyMina;
+import org.me.blastymina.api.TitleAPI;
+import org.me.blastymina.utils.rewards.EnchantsRewardsManager;
 
 public class BritadeiraEnchant {
-    public Player p;
-    public PacketContainer packet;
+    private Player p;
+    private PacketContainer packet;
     ProtocolManager manager = BlastyMina.getManager();
-    public Block block;
+    private Block block;
+    private TitleAPI api = new TitleAPI();
+    private FileConfiguration config = BlastyMina.getPlugin(BlastyMina.class).getConfig();
+
 
     public BritadeiraEnchant(Player p, Block block) {
         this.block = block;
@@ -27,13 +33,13 @@ public class BritadeiraEnchant {
         packetSend();
     }
 
-        public void packetSend() {
+        private void packetSend() {
         int blocks = 0;
         double x = block.getX();
         double z = block.getZ();
         World world = block.getWorld();
 
-        int width = 7;
+        int width = config.getInt("mina.enchants.britadeira.width");
 
         int centerX = (int) x;
         int centerZ = (int) z;
@@ -52,15 +58,14 @@ public class BritadeiraEnchant {
                     packet.getBlockData().write(0, WrappedBlockData.createData(Material.AIR));
                     manager.sendServerPacket(p,packet);
                     ++blocks;
+                    EnchantsRewardsManager enchantsRewardsManager = new EnchantsRewardsManager(p, blocks, "britadeira");
                 } catch (Exception e) {
                     Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Britadeira ]" + ChatColor.RED +
                             "Erro ao enviar o pacote do jogador " + p.getName() + ".");
                 }
             }
         }
-
-        this.p.sendMessage(ChatColor.AQUA + "[ Britadeira ]" + ChatColor.GREEN +
-                " ativado foram quebrados " + blocks + " blocos");
+        api.sendFullTitle(p, 1, 1, 2, ChatColor.YELLOW + "Britadeira", "Ativado foram quebrados " + blocks + " blocos");
     }
 }
 

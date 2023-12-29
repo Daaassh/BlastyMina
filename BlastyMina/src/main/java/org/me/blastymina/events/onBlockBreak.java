@@ -10,22 +10,26 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.Plugin;
 import org.me.blastymina.BlastyMina;
+import org.me.blastymina.api.TitleAPI;
 import org.me.blastymina.utils.porcentage.PorcentageManager;
 import org.me.blastymina.utils.rewards.CreateItems;
 
 public class onBlockBreak
 implements Listener {
     private final ProtocolManager protocolManager = BlastyMina.getManager();
+    private TitleAPI api = new TitleAPI();
 
     @EventHandler
     public void blockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
+        FileConfiguration config = BlastyMina.getPlugin(BlastyMina.class).getConfig();
         if (player == null || !player.isOnline()) {
             return;
         }
@@ -37,7 +41,7 @@ implements Listener {
             }
 
             Bukkit.getScheduler().runTaskLater(BlastyMina.getPlugin(BlastyMina.class), () -> packetSend(player, event.getBlock()), 1L);
-
+            api.setTitle(player, 1, 1, 2, ChatColor.YELLOW + "Mina",ChatColor.translateAlternateColorCodes('&', config.getString("mina.blocks.msg-on-break").replace("{coins}", String.valueOf((int)BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.blocks.coin-por-block")))));
         }
     }
 
