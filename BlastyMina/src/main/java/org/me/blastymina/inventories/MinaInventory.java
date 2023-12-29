@@ -26,8 +26,8 @@ public class MinaInventory {
         meta = pickage.getItemMeta();
         meta.setDisplayName("§cPickaxe");
         pickage.setItemMeta(meta);
-        inventory.setItem(14, reset);
-        inventory.setItem(16, pickage);
+        inventory.setItem(13, reset);
+        inventory.setItem(15, pickage);
         player.openInventory(inventory);
     }
 }

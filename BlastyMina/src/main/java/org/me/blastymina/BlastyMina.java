@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.me.blastymina.commands.MinaCommand;
 import org.me.blastymina.commands.SetLocationMina;
 import org.me.blastymina.events.onBlockBreak;
+import org.me.blastymina.events.onInventoryClick;
 import org.me.blastymina.events.onPlayerInteract;
 import org.me.blastymina.utils.LocationConfig;
 
@@ -23,9 +24,9 @@ extends JavaPlugin {
 
     public void onEnable() {
         instance = this;
-        this.saveDefaultConfig();
+        saveDefaultConfig();
         manager = ProtocolLibrary.getProtocolManager();
-        this.registerEvents();
+        registerEvents();
         try {
             new LocationConfig(instance);
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ]" + ChatColor.GREEN + "Configurac\u0327o\u0303es carregadas.");
@@ -33,8 +34,8 @@ extends JavaPlugin {
             e.printStackTrace();
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ]" + ChatColor.RED + "Erro ao carregar as configurac\u0327o\u0303es.");
         }
-        this.getCommand("mina").setExecutor((CommandExecutor)new MinaCommand());
-        this.getCommand("minaadm").setExecutor((CommandExecutor)new SetLocationMina());
+        getCommand("mina").setExecutor(new MinaCommand());
+        getCommand("minaadm").setExecutor(new SetLocationMina());
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ]" + ChatColor.GREEN + "Plugin carregado.");
     }
 
@@ -44,9 +45,9 @@ extends JavaPlugin {
 
     private void registerEvents() {
         try {
-            this.getServer().getPluginManager().registerEvents((Listener)new onPlayerInteract(), (Plugin)this.instance);
-            this.getServer().getPluginManager().registerEvents((Listener)new onPlayerInteract(), (Plugin)this.instance);
-            this.getServer().getPluginManager().registerEvents((Listener)new onBlockBreak(), (Plugin)this.instance);
+            getServer().getPluginManager().registerEvents(new onInventoryClick(), instance);
+            getServer().getPluginManager().registerEvents(new onPlayerInteract(), instance);
+            getServer().getPluginManager().registerEvents(new onBlockBreak(), instance);
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ]" + ChatColor.GREEN + "Eventos carregados.");
         } catch (Exception e) {
             e.printStackTrace();

@@ -23,7 +23,7 @@ public class LocationConfig {
     private void createConfig() {
         if (!configFile.exists()) {
             configFile.getParentFile().mkdirs();
-            plugin.saveResource("locations.yml", false);
+            plugin.saveResource("locations.yml", true);
         }
     }
 

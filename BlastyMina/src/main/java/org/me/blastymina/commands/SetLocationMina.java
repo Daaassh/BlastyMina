@@ -14,7 +14,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.me.blastymina.BlastyMina;
 import org.me.blastymina.utils.LocationConfig;
@@ -56,6 +55,9 @@ implements CommandExecutor {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+        } else if (args[0].equalsIgnoreCase("reload")) {
+            BlastyMina.getPlugin(BlastyMina.class).reloadConfig();
+            p.sendMessage(ChatColor.GREEN + "Config recarregada");
         }
         return false;
     }

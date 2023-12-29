@@ -14,20 +14,20 @@ public class onInventoryClick
 implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (e.getClickedInventory().getName().equalsIgnoreCase("&&cMina")) {
+        if (e.getClickedInventory().getName().equalsIgnoreCase("§cMina")) {
             Player p = (Player)e.getWhoClicked();
             switch (e.getCurrentItem().getType()) {
                 case DIAMOND_ORE: {
                     p.closeInventory();
                     p.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(5, 5));
                     PacketsManager packet = new PacketsManager(p, p.getLocation(), 15);
-                    packet.packetSend();
                     new SendPlayerToSpawn(p);
                     break;
                 }
                 case DIAMOND_PICKAXE: {
                     p.sendMessage(ChatColor.RED + "Em breve...");
                     p.closeInventory();
+                    break;
                 }
             }
         }

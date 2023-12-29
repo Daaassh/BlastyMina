@@ -16,6 +16,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.Plugin;
 import org.me.blastymina.BlastyMina;
+import org.me.blastymina.utils.porcentage.PorcentageManager;
+import org.me.blastymina.utils.rewards.CreateItems;
 
 public class onBlockBreak
 implements Listener {
@@ -29,7 +31,14 @@ implements Listener {
         }
         if (player.getWorld().getName().equalsIgnoreCase("mina") && event.getBlock().getType() == Material.STONE) {
             event.setCancelled(true);
-            Bukkit.getScheduler().runTaskLater((Plugin)BlastyMina.getPlugin(BlastyMina.class), () -> this.packetSend(player, event.getBlock()), 5L);
+            double chance = BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.rewards.chance");
+            if (new PorcentageManager(chance).setup()) {
+                new CreateItems(player);
+                player.sendMessage(ChatColor.GREEN + "Você recebeu uma recompensa.");
+            }
+
+            Bukkit.getScheduler().runTaskLater(BlastyMina.getPlugin(BlastyMina.class), () -> packetSend(player, event.getBlock()), 1L);
+
         }
     }
 
@@ -38,10 +47,10 @@ implements Listener {
             return;
         }
         try {
-            PacketContainer packet = this.protocolManager.createPacket(PacketType.Play.Server.BLOCK_CHANGE);
-            packet.getBlockPositionModifier().write(0, (Object)new BlockPosition(block.getX(), block.getY(), block.getZ()));
-            packet.getBlockData().write(0, (Object)WrappedBlockData.createData((Material)Material.AIR));
-            this.protocolManager.sendServerPacket(player, packet);
+            PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.BLOCK_CHANGE);
+            packet.getBlockPositionModifier().write(0, new BlockPosition(block.getX(), block.getY(), block.getZ()));
+            packet.getBlockData().write(0, WrappedBlockData.createData(Material.AIR));
+            protocolManager.sendServerPacket(player, packet);
             player.sendMessage("\u00a7a[ Blasty Mina ]" + ChatColor.GREEN + "Bloco destru\u00eddo.");
         } catch (Exception e) {
             e.printStackTrace();

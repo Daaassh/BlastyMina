@@ -24,31 +24,43 @@ public class BritadeiraEnchant {
     public BritadeiraEnchant(Player p, Block block) {
         this.block = block;
         this.p = p;
-        this.packetSend();
+        packetSend();
     }
 
-    public void packetSend() {
+        public void packetSend() {
         int blocks = 0;
-        double x = this.block.getX();
-        double z = this.block.getZ();
-        World world = this.block.getWorld();
-        for (int j = (int)x; j < (int)(x + 15.0 / 2.0); ++j) {
-            for (int h = (int)z; h < (int)(z + 15.0 / 2.0); ++h) {
-                Block currentBlock = world.getBlockAt(j, this.block.getY(), h);
+        double x = block.getX();
+        double z = block.getZ();
+        World world = block.getWorld();
+
+        int width = 7;
+
+        int centerX = (int) x;
+        int centerZ = (int) z;
+
+        for (int j = centerX - (width / 2); j <= centerX + (width / 2); ++j) {
+            for (int h = centerZ - (width / 2); h <= centerZ + (width / 2); ++h) {
+                Block currentBlock = world.getBlockAt(j,block.getY(),h);
                 if (currentBlock.getType() != Material.STONE) continue;
                 PacketContainer packet = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
-                packet.getBlockPositionModifier().write(0, (Object)new BlockPosition(j, this.block.getY(), h));
-                packet.getBlockData().write(0, (Object)WrappedBlockData.createData((Material)Material.AIR));
+                packet.getBlockPositionModifier().write(0, new BlockPosition(j, block.getY(), h));
+                packet.getBlockData().write(0, WrappedBlockData.createData(Material.AIR));
+
                 try {
-                    ProtocolLibrary.getProtocolManager().sendServerPacket(this.p, packet);
+                    manager.sendServerPacket(p, packet);
+                    packet.getBlockPositionModifier().write(0, new BlockPosition(j, block.getY(), h));
+                    packet.getBlockData().write(0, WrappedBlockData.createData(Material.AIR));
+                    manager.sendServerPacket(p,packet);
                     ++blocks;
-                    continue;
                 } catch (Exception e) {
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Britadeira ]" + ChatColor.RED + "Erro ao enviar o pacote do jogador " + this.p.getName() + ".");
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Britadeira ]" + ChatColor.RED +
+                            "Erro ao enviar o pacote do jogador " + p.getName() + ".");
                 }
             }
         }
-        this.p.sendMessage(ChatColor.AQUA + "[ Britadeira ]" + ChatColor.GREEN + " ativado foram quebrados " + blocks + " blocos");
+
+        this.p.sendMessage(ChatColor.AQUA + "[ Britadeira ]" + ChatColor.GREEN +
+                " ativado foram quebrados " + blocks + " blocos");
     }
 }
 

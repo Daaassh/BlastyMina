@@ -1,0 +1,34 @@
+mina:
+  rewards:
+    chance: 10.0
+    itens:
+      1:
+        name: 'Nome Mt daora'
+        chance: 10.0
+        id: 1
+        lore:
+          - 'Arroz e saudavel?'
+          - 'Feijão tbm é mo daora'
+        commands:
+          usage: true
+          command: "me ARRROZ"
+      2:
+        name: 'Nome Mt daora'
+        chance: 50.0
+        id: 2
+        lore:
+          - 'ArroSSSSz e saudavel?'
+          - 'Feijão SSSSSS tbm é mo daora'
+        commands:
+          usage: false
+          command: "give {player} 1 minecraft:dirt"
+      3:
+        name: 'Nome Mt daora'
+        chance: 25.0
+        id: 3
+        lore:
+          - 'Arroz e saudavel?'
+          - 'Feijão tbm é mo daora'
+        commands:
+          usage: true
+          command: "me POBRES"

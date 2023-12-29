@@ -36,15 +36,15 @@ public class ParticleManager {
 
     public void sendParticlePacket() {
         PacketContainer packet = new PacketContainer(PacketType.Play.Server.WORLD_PARTICLES);
-        packet.getParticles().write(0, (Object)EnumWrappers.Particle.valueOf((String)this.particle.name()));
-        packet.getFloat().write(0, (Object)Float.valueOf(this.block.getX()));
-        packet.getFloat().write(1, (Object)Float.valueOf(this.block.getY()));
-        packet.getFloat().write(2, (Object)Float.valueOf(this.block.getZ()));
-        packet.getFloat().write(3, (Object)Float.valueOf(0.0f));
-        packet.getFloat().write(4, (Object)Float.valueOf(0.75f));
-        packet.getFloat().write(5, (Object)Float.valueOf(0.0f));
-        packet.getFloat().write(6, (Object)Float.valueOf(1.0f));
-        packet.getIntegers().write(0, (Object)5);
+        packet.getParticles().write(0, EnumWrappers.Particle.valueOf((String)this.particle.name()));
+        packet.getFloat().write(0, (float) block.getX());
+        packet.getFloat().write(1, (float) block.getY());
+        packet.getFloat().write(2, (float) block.getZ());
+        packet.getFloat().write(3, 0.0f);
+        packet.getFloat().write(4, 0.75f);
+        packet.getFloat().write(5, 0.0f);
+        packet.getFloat().write(6, 1.0f);
+        packet.getIntegers().write(0, 5);
         try {
             this.protocolManager.sendServerPacket(this.player, packet);
         } catch (Exception e) {
