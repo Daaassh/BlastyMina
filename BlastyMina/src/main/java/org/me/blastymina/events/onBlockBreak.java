@@ -34,7 +34,6 @@ implements Listener {
             double chance = BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.rewards.chance");
             if (new PorcentageManager(chance).setup()) {
                 new CreateItems(player);
-                player.sendMessage(ChatColor.GREEN + "Você recebeu uma recompensa.");
             }
 
             Bukkit.getScheduler().runTaskLater(BlastyMina.getPlugin(BlastyMina.class), () -> packetSend(player, event.getBlock()), 1L);
@@ -51,7 +50,6 @@ implements Listener {
             packet.getBlockPositionModifier().write(0, new BlockPosition(block.getX(), block.getY(), block.getZ()));
             packet.getBlockData().write(0, WrappedBlockData.createData(Material.AIR));
             protocolManager.sendServerPacket(player, packet);
-            player.sendMessage("\u00a7a[ Blasty Mina ]" + ChatColor.GREEN + "Bloco destru\u00eddo.");
         } catch (Exception e) {
             e.printStackTrace();
             Bukkit.getConsoleSender().sendMessage("\u00a7a[ Blasty Mina ] \u00a7cPacket n\u00e3o foi enviada.");

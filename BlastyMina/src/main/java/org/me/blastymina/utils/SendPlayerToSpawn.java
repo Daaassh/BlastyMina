@@ -21,7 +21,7 @@ public class SendPlayerToSpawn {
         double y = config.loadLocation("spawn.location.y");
         double z = config.loadLocation("spawn.location.z");
         World world = Bukkit.getWorld(config.loadWorld("spawn.location.world"));
-        this.player.teleport(new Location(world, x, y, z));
+        player.teleport(new Location(world, x, y, z));
     }
 }
 

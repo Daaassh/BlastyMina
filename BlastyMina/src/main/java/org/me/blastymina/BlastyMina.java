@@ -23,6 +23,7 @@ extends JavaPlugin {
     private BlastyMina instance;
 
     public void onEnable() {
+        verifyDependencies();
         instance = this;
         saveDefaultConfig();
         manager = ProtocolLibrary.getProtocolManager();
@@ -51,6 +52,16 @@ extends JavaPlugin {
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ]" + ChatColor.GREEN + "Eventos carregados.");
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    private void verifyDependencies() {
+        if (!Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[ Blasty Mina ]" + ChatColor.RED + "Plugin 'ProtocolLib' n\u00e3o encontrado.");
+            getServer().getPluginManager().disablePlugin(this);
+        }
+        if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[ Blasty Mina ]" + ChatColor.RED + "Plugin 'PlaceholderAPI' n\u00e3o encontrado.");
+            getServer().getPluginManager().disablePlugin(this);
         }
     }
 }

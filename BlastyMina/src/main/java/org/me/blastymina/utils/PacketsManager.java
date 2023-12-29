@@ -56,9 +56,9 @@ public class PacketsManager {
             int centerY = (int)y;
             int centerZ = (int)z;
 
-            for (int i = centerX - size / 2; i <= centerX + size / 2; ++i) {
-                for (int k = centerY - size / 2; k <= centerY + size / 2; ++k) {
-                    for (int j = centerZ - size / 2; j <= centerZ + size / 2; ++j) {
+            for (int i = centerX - size / 2; i <= (centerX + size) / 2; ++i) {
+                for (int k = centerY - size / 2; k <= (centerY + size) / 2; ++k) {
+                    for (int j = centerZ - size / 2; j <= (centerZ + size) / 2; ++j) {
                         try {
                             Block block = world.getBlockAt(i, k, j);
                             PacketContainer packet = manager.createPacket(PacketType.Play.Server.BLOCK_CHANGE);

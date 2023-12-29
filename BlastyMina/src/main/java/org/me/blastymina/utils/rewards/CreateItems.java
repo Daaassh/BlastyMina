@@ -9,12 +9,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.me.blastymina.BlastyMina;
+import org.me.blastymina.api.TitleAPI;
 import org.me.blastymina.utils.porcentage.PorcentageManager;
 
 import java.util.List;
 
 public class CreateItems {
     private Player player;
+    private TitleAPI api = new TitleAPI();
 
     public CreateItems(Player player) {
         this.player = player;
@@ -35,6 +37,7 @@ public class CreateItems {
 
                 if (manager.setup()) {
                     createItemFromConfig(section, itemName);
+                    api.sendFullTitle(player, 5,5,5,ChatColor.YELLOW + "Recompensas", "Você recebeu uma recompensa");
                 }
             }
         }
@@ -56,6 +59,7 @@ public class CreateItems {
                 } else {
                     player.getInventory().addItem(item);
                 }
+
             }
         } else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Material inválido para " + itemName);
