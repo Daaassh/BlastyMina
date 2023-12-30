@@ -42,9 +42,6 @@ public class PacketsManager {
 
     public void createCuboid() {
         LocationConfig config = new LocationConfig(BlastyMina.getPlugin(BlastyMina.class));
-        if (config == null) {
-            return;
-        }
         if (config.loadWorld("mina.location.world") == null) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Mina ]"+ ChatColor.RED + "Local da mina não foi definida.");
         } else {
@@ -61,8 +58,8 @@ public class PacketsManager {
                     for (int j = centerZ - size / 2; j <= (centerZ + size) / 2; ++j) {
                         try {
                             Block block = world.getBlockAt(i, k, j);
-                            PacketContainer packet = manager.createPacket(PacketType.Play.Server.BLOCK_CHANGE);
-                            packet.getBlockPositionModifier().write(0, new BlockPosition(block.getX(), block.getY(), block.getZ()));
+                            PacketContainer packet = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
+                            packet.getBlockPositionModifier().write(0, new BlockPosition(i, k, j));
                             packet.getBlockData().write(0, WrappedBlockData.createData(Material.STONE));
                             Bukkit.getScheduler().runTaskLater(BlastyMina.getPlugin(BlastyMina.class), () -> manager.sendServerPacket(player, packet), 1L);
                         } catch (Exception e) {

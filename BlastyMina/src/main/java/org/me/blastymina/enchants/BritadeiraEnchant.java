@@ -58,14 +58,14 @@ public class BritadeiraEnchant {
                     packet.getBlockData().write(0, WrappedBlockData.createData(Material.AIR));
                     manager.sendServerPacket(p,packet);
                     ++blocks;
-                    EnchantsRewardsManager enchantsRewardsManager = new EnchantsRewardsManager(p, blocks, "britadeira");
+                    new EnchantsRewardsManager(p, blocks, "britadeira");
                 } catch (Exception e) {
                     Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Britadeira ]" + ChatColor.RED +
                             "Erro ao enviar o pacote do jogador " + p.getName() + ".");
                 }
             }
         }
-        api.sendFullTitle(p, 1, 1, 2, ChatColor.YELLOW + "Britadeira", "Ativado foram quebrados " + blocks + " blocos");
+        api.sendFullTitle(p, 3, 3, 5, ChatColor.YELLOW + "Britadeira", "Ativado foram quebrados " + blocks + " blocos");
     }
 }
 

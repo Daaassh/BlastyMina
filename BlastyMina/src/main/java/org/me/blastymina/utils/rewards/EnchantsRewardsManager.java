@@ -25,9 +25,9 @@ public class EnchantsRewardsManager {
 
 
     private void sendRewards() {
-        if (!(player.isOnline())) {
+        if (player.isOnline()) {
             double multiply = config.getDouble("mina.rewards.enchants." + enchant + ".rewards.multiply");
-            double chance = multiply * blocks;
+            double chance = (multiply * blocks) / 100;
             PorcentageEnchantsManager manager = new PorcentageEnchantsManager(chance);
             if (manager.setup()){
                 new CreateItems(player);

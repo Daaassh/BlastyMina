@@ -17,14 +17,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.Plugin;
 import org.me.blastymina.BlastyMina;
+import org.me.blastymina.api.PrimeActionbar;
 import org.me.blastymina.api.TitleAPI;
+import org.me.blastymina.database.MySqlUtils;
 import org.me.blastymina.utils.porcentage.PorcentageManager;
 import org.me.blastymina.utils.rewards.CreateItems;
 
 public class onBlockBreak
 implements Listener {
     private final ProtocolManager protocolManager = BlastyMina.getManager();
-    private TitleAPI api = new TitleAPI();
 
     @EventHandler
     public void blockBreak(BlockBreakEvent event) {
@@ -39,9 +40,13 @@ implements Listener {
             if (new PorcentageManager(chance).setup()) {
                 new CreateItems(player);
             }
-
+            MySqlUtils.getPlayer(player).setXp(MySqlUtils.getPlayer(player).getXP() + (int)BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.blocks.xp-por-block"));
+            MySqlUtils.getPlayer(player).setBlocks(MySqlUtils.getPlayer(player).getBlocks() + 1);
+            MySqlUtils.getPlayer(player).verifyLevels();
+            player.sendMessage(ChatColor.RED + "Blocos: " + MySqlUtils.getPlayer(player).getBlocks());
+            player.sendMessage(ChatColor.RED + "XP: " + MySqlUtils.getPlayer(player).getXP());
             Bukkit.getScheduler().runTaskLater(BlastyMina.getPlugin(BlastyMina.class), () -> packetSend(player, event.getBlock()), 1L);
-            api.setTitle(player, 1, 1, 2, ChatColor.YELLOW + "Mina",ChatColor.translateAlternateColorCodes('&', config.getString("mina.blocks.msg-on-break").replace("{coins}", String.valueOf((int)BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.blocks.coin-por-block")))));
+            PrimeActionbar.sendActionbar(player,ChatColor.YELLOW + "Mina | " + ChatColor.translateAlternateColorCodes('&', config.getString("mina.blocks.msg-on-break").replace("{coins}", String.valueOf((int)BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.blocks.coin-por-block")))));
         }
     }
 

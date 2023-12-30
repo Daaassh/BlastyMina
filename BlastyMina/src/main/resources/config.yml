@@ -1,5 +1,8 @@
 mina:
+    location:
+      world: "mina"
     blocks:
+      xp-por-block: 1.0
       msg-on-break: "&cVocê quebrou um bloco é recebeu {coins} coins"
       coin-por-block: 124.0
     rewards:
@@ -41,6 +44,10 @@ mina:
         rewards:
           multiply: 5.0
       laser:
+        distance: 25
+        rewards:
+          multiply: 0.1
+      raio:
         distance: 25
         rewards:
           multiply: 0.1

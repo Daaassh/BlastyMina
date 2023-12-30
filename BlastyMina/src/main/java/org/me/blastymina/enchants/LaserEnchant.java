@@ -49,7 +49,7 @@ public class LaserEnchant {
             }
         }
 
-        api.sendFullTitle(p, 1, 1, 2, ChatColor.YELLOW + "Britadeira", "Ativado foram quebrados " + blocks + " blocos");
+        api.sendFullTitle(p, 3, 3, 5, ChatColor.YELLOW + "Laser", "Ativado foram quebrados " + blocks + " blocos");
 
     }
 }

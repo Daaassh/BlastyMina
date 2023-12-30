@@ -20,7 +20,7 @@ implements Listener {
                 case DIAMOND_ORE: {
                     p.closeInventory();
                     p.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(5, 5));
-                    PacketsManager packet = new PacketsManager(p, p.getLocation(), 20);
+                    new PacketsManager(p, p.getLocation(), 20);
                     new SendPlayerToSpawn(p);
                     break;
                 }

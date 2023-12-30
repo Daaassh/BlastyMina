@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.me.blastymina.BlastyMina;
+import org.me.blastymina.utils.rewards.EnchantsRewardsManager;
 
 public class RaioEnchant {
     public Block block;
@@ -28,8 +29,8 @@ public class RaioEnchant {
         double x = block.getX();
         double y = block.getY();
         World world = block.getWorld();
-        for (int z = (int)x; x < (int)(z + 15); --z)
-            for (int h = (int)y; h < (int)(y - 1); --h) {
+        for (int z = (int)x; x < (z + 15); --z)
+            for (int h = (int)y; h < (y - 1); --h) {
                 Block currentBlock = world.getBlockAt(z, h, block.getZ());
                 if (currentBlock.getType() != Material.STONE) continue;
                 PacketContainer packet = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
@@ -38,6 +39,7 @@ public class RaioEnchant {
                 try {
                     manager.sendServerPacket(p, packet);
                     ++blocks;
+                    new EnchantsRewardsManager(p, blocks, "raio");
                 } catch (Exception e) {
                     Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Raio ]" + ChatColor.RED + "Erro ao enviar o pacote do jogador " + this.p.getName() + ".");
                 }

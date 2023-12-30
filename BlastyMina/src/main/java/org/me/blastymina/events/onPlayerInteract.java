@@ -15,14 +15,21 @@ public class onPlayerInteract
 implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
-        Player p;
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            Player p2 = e.getPlayer();
-            if (p2.getItemInHand().getType() == Material.GOLD_PICKAXE) {
-                new LaserEnchant(p2);
+        Player p = e.getPlayer();
+        if (p.getItemInHand().getType() == Material.GOLD_PICKAXE) {
+            if (p.isSneaking()) {
+                if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    new RaioEnchant(p, e.getClickedBlock());
+                }
             }
-        } else if (e.getAction() == Action.LEFT_CLICK_BLOCK && (p = e.getPlayer()).getItemInHand().getType() == Material.GOLD_PICKAXE) {
-            new BritadeiraEnchant(p, e.getClickedBlock());
+            switch (e.getAction()){
+                case RIGHT_CLICK_BLOCK:
+                    new LaserEnchant(p);
+                    break;
+                case LEFT_CLICK_BLOCK:
+                    new BritadeiraEnchant(p, e.getClickedBlock());
+                    break;
+            }
         }
     }
 }
