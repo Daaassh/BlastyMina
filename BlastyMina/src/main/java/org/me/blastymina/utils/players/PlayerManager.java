@@ -6,6 +6,9 @@ import org.me.blastymina.api.TitleAPI;
 import org.me.blastymina.database.MySqlUtils;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class PlayerManager {
     private Player player;
@@ -18,10 +21,21 @@ public class PlayerManager {
     private Integer raio;
     private Integer bonus;
     private Integer skin;
+    private Integer explosao;
+    private Integer multiplicador;
+    private Integer velocidade;
+    private Integer xpbooster;
 
-    public PlayerManager(Player player, Integer blocks,Integer nivel, Double xp, Integer fortuna, Integer britadeira, Integer laser, Integer raio, Integer bonus, Integer skin) {
+
+    private Map<UUID, Player> xpplayers = new HashMap<>();
+
+    public PlayerManager(Player player, Integer velocidade,Integer xpbooster,Integer multiplicador,Integer explosao,Integer blocks,Integer nivel, Double xp, Integer fortuna, Integer britadeira, Integer laser, Integer raio, Integer bonus, Integer skin) {
         this.player = player;
         this.nivel = nivel;
+        this.velocidade = velocidade;
+        this.xpbooster = xpbooster;
+        this.multiplicador = multiplicador;
+        this.explosao = explosao;
         this.blocks = blocks;
         this.xp = xp;
         this.fortuna = fortuna;
@@ -30,6 +44,37 @@ public class PlayerManager {
         this.raio = raio;
         this.bonus = bonus;
         this.skin = skin;
+    }
+
+    public Integer getVelocidade() {
+        return velocidade;
+    }
+
+    public void setVelocidade(Integer velocidade) {
+        this.velocidade = velocidade;
+    }
+
+    public Integer getXpbooster() {
+        return xpbooster;
+    }
+
+    public void setXpbooster(Integer xpbooster) {
+        this.xpbooster = xpbooster;
+    }
+
+    public Integer getMultiplicador() {
+        return multiplicador;
+    }
+
+    public void setMultiplicador(Integer multiplicador) {
+        this.multiplicador = multiplicador;
+    }
+    public Integer getExplosao() {
+        return explosao;
+    }
+
+    public void setExplosao(Integer explosao) {
+        this.explosao = explosao;
     }
 
     public Player getPlayer() {
@@ -117,32 +162,51 @@ public class PlayerManager {
             player.sendMessage("§aParabéns, você alcançou o nível " + (nivel + 1) + "!");
             xp = 0;
             nivel++;
+            xpplayers.put(player.getUniqueId(), player);
         }
     }
     public void verifyLevels() throws SQLException {
         switch (MySqlUtils.getPlayer(player).getNivel()) {
             case 10:
                 player.sendMessage("§aParabéns, você alcançou o nível 10!");
-                SpawnFirework.small(player);
+                if (xpplayers.containsKey(player.getUniqueId())) {
+                    SpawnFirework.small(player);
+                    xpplayers.remove(player.getUniqueId());
+                }
                 break;
             case 25:
-                SpawnFirework.small(player);
+                if (xpplayers.containsKey(player.getUniqueId())) {
+                    SpawnFirework.small(player);
+                    xpplayers.remove(player.getUniqueId());
+                }
                 player.sendMessage("§aParabéns, você alcançou o nível 25!");
                 break;
             case 50:
-                SpawnFirework.medium(player);
+                if (xpplayers.containsKey(player.getUniqueId())) {
+                    SpawnFirework.medium(player);
+                    xpplayers.remove(player.getUniqueId());
+                }
                 player.sendMessage("§aParabéns, você alcançou o nível 50!");
                 break;
             case 75:
-                SpawnFirework.medium(player);
+                if (xpplayers.containsKey(player.getUniqueId())) {
+                    SpawnFirework.medium(player);
+                    xpplayers.remove(player.getUniqueId());
+                }
                 player.sendMessage("§aParabéns, você alcançou o nível 75!");
                 break;
             case 150:
-                SpawnFirework.big(player);
+                if (xpplayers.containsKey(player.getUniqueId())) {
+                    SpawnFirework.big(player);
+                    xpplayers.remove(player.getUniqueId());
+                }
                 player.sendMessage("§aParabéns, você alcançou o nível 150!");
                 break;
             case 300:
-                SpawnFirework.big(player);
+                if (xpplayers.containsKey(player.getUniqueId())) {
+                    SpawnFirework.big(player);
+                    xpplayers.remove(player.getUniqueId());
+                }
                 player.sendMessage("§aParabéns, você alcançou o nível 300!");
                 break;
         }

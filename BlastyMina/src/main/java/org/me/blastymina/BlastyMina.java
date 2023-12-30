@@ -17,6 +17,7 @@ import org.me.blastymina.events.onInventoryClick;
 import org.me.blastymina.events.onPlayerInteract;
 import org.me.blastymina.events.onPlayerJoin;
 import org.me.blastymina.utils.LocationConfig;
+import org.me.blastymina.utils.placeholder.BlastyExpansion;
 
 import java.sql.SQLException;
 
@@ -60,25 +61,26 @@ extends JavaPlugin {
             getServer().getPluginManager().registerEvents(new onInventoryClick(), instance);
             getServer().getPluginManager().registerEvents(new onPlayerInteract(), instance);
             getServer().getPluginManager().registerEvents(new onBlockBreak(), instance);
-            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ]" + ChatColor.GREEN + "Eventos carregados.");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "Eventos carregados.");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     private void verifyDependencies() {
         if (!Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ]" + ChatColor.RED + "Plugin 'ProtocolLib' n\u00e3o encontrado.");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.RED + "Plugin 'ProtocolLib' n\u00e3o encontrado.");
             getServer().getPluginManager().disablePlugin(this);
         }
         else {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ]" + ChatColor.GREEN + "Plugin 'ProtocolLib' encontrado.");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "Plugin 'ProtocolLib' encontrado.");
         }
         if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ]" + ChatColor.RED + "Plugin 'PlaceholderAPI' n\u00e3o encontrado.");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.RED + "Plugin 'PlaceholderAPI' n\u00e3o encontrado.");
             getServer().getPluginManager().disablePlugin(this);
         }
         else {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ]" + ChatColor.GREEN + "Plugin 'PlaceholderAPI' encontrado.");
+            new BlastyExpansion(this).register();
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "Plugin 'PlaceholderAPI' encontrado.");
         }
     }
 }

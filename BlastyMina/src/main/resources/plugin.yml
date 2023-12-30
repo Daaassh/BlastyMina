@@ -1,7 +1,9 @@
 name: BlastyMina
 version: '${project.version}'
 main: org.me.blastymina.BlastyMina
-depend: [ ProtocolLib ]
+softdepend:
+  - ProtocolLib
+  - PlaceholderAPI
 commands:
   mina:
     description: a

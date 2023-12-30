@@ -38,16 +38,152 @@ mina:
           commands:
             usage: true
             command: "me POBRES"
+
+    pickaxe:
+      name: "&cPicareta"
+      lore:
+        - "&cPicareta de mina"
+        -
+        - "Britadeira: {britadeira}/{max-level}"
+        - "Laser: {laser}/{max-level}"
+        - "Multiplicador: {multiplicador}/{max-level}"
+        - "Fortuna: {fortuna}/{max-level}"
+        - "Bonus: {bonus}/{max-level}"
+        - "Raio: {raio}/{max-level}"
+        - "XP Booster: {xpbooster}/{max-level}"
+        - "Explosão: {explosao}/{max-level}"
+        - ""
     enchants:
       britadeira:
+        item:
+          name: "&cBritadeira"
+          lore:
+            - "Ative a britadeira para quebrar"
+            - "uma camada inteira da mina"
+            - " "
+            - " Nivel: {britadeira}/{max-level}} []"
+            - " "
+            - "| &bBotão Esquerdo: Upar 1 nivel"
+            - "| &bBotão Direito: Escolher quantia"
+            - "| &bScroll: Upar o maximo possivel"
+        max-level: 100
         width: 15
         rewards:
           multiply: 5.0
       laser:
+        item:
+          name: "&cLaser"
+          lore:
+            - "Ative a laser para quebrar"
+            - "uma camada inteira da mina"
+            - " "
+            - " Nivel: {laser}/{max-level}} []"
+            - " "
+            - "| &bBotão Esquerdo: Upar 1 nivel"
+            - "| &bBotão Direito: Escolher quantia"
+            - "| &bScroll: Upar o maximo possivel"
+        max-level: 25
         distance: 25
         rewards:
           multiply: 0.1
+      fortuna:
+        item:
+          name: "&cFortuna"
+          lore:
+            - "Ative a britadeira para quebrar"
+            - "uma camada inteira da mina"
+            - " "
+            - " Nivel: {fortuna}/{max-level}} []"
+            - " "
+            - "| &bBotão Esquerdo: Upar 1 nivel"
+            - "| &bBotão Direito: Escolher quantia"
+            - "| &bScroll: Upar o maximo possivel"
+        max-level: 100
+        multiply: 100.0
+      bonus:
+        item:
+          name: "&cBritadeira"
+          lore:
+            - "Ative a britadeira para quebrar"
+            - "uma camada inteira da mina"
+            - " "
+            - " Nivel: {bonus}/{max-level}} []"
+            - " "
+            - "| &bBotão Esquerdo: Upar 1 nivel"
+            - "| &bBotão Direito: Escolher quantia"
+            - "| &bScroll: Upar o maximo possivel"
+        max-level: 100
+        multiply: 10.0
+      explosao:
+        item:
+          name: "&cExplosao"
+          lore:
+            - "Ative a explosao para quebrar"
+            - "um 3x3 na mina"
+            - " "
+            - " Nivel: {explosao}/{max-level}} []"
+            - " "
+            - "| &bBotão Esquerdo: Upar 1 nivel"
+            - "| &bBotão Direito: Escolher quantia"
+            - "| &bScroll: Upar o maximo possivel"
+        max-level: 100
+        width: 3
+        rewards:
+          multiply: 5.0
+      multiplicador:
+        item:
+          name: "&cMultiplicador"
+          lore:
+            - "Ative a multiplicador para ganhar"
+            - "mais blocos ao quebrar um bloco"
+            - " "
+            - " Nivel: {multiplicador}/{max-level}} []"
+            - " "
+            - "| &bBotão Esquerdo: Upar 1 nivel"
+            - "| &bBotão Direito: Escolher quantia"
+            - "| &bScroll: Upar o maximo possivel"
+        max-level: 100
+        multiply: 5.0
+      velocidade:
+        item:
+          name: "&cVelocidade"
+          lore:
+            - "Ative a velocidade para ganhar"
+            - "o efeito de velocidade"
+            - " "
+            - " Nivel: {velocidade}/{max-level}} []"
+            - " "
+            - "| &bBotão Esquerdo: Upar 1 nivel"
+            - "| &bBotão Direito: Escolher quantia"
+            - "| &bScroll: Upar o maximo possivel"
+        max-level: 2
+      xpbooster:
+        item:
+          name: "&cXp Booster"
+          lore:
+            - "Ative o xp booster para ganhar"
+            - "mais xp ao minerar"
+            - " "
+            - " Nivel: {xpbooster}/{max-level}} []"
+            - " "
+            - "| &bBotão Esquerdo: Upar 1 nivel"
+            - "| &bBotão Direito: Escolher quantia"
+            - "| &bScroll: Upar o maximo possivel"
+        max-level: 100
+        multiply: 2.0
       raio:
+        item:
+          name: "&cXp Booster"
+          lore:
+            - "Ative o xp booster para ganhar"
+            - "mais xp ao minerar"
+            - " "
+            - " Nivel: {raio}/{max-level}} []"
+            - " "
+            - "| &bBotão Esquerdo: Upar 1 nivel"
+            - "| &bBotão Direito: Escolher quantia"
+            - "| &bScroll: Upar o maximo possivel"
+        max-level: 100
         distance: 25
         rewards:
           multiply: 0.1
