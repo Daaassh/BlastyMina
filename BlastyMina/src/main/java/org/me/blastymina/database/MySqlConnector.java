@@ -37,7 +37,7 @@ public class MySqlConnector {
             if (!(tableExists("users"))) {
                 try {
                     createUsersTable();
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[ MySQL ] Tabelas criadas com sucesso");
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ MySQL ] " + ChatColor.GREEN +" Tabelas criadas com sucesso");
                 }catch (Exception e) {
                     Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[ MySQL ] Erro ao criar as tabelas");
                 }
@@ -51,11 +51,6 @@ public class MySqlConnector {
         return DriverManager.getConnection(url, usuario, senhaDecodificada);
     }
 
-    public void close() throws SQLException {
-        if (mysqlClient != null) {
-            mysqlClient.close();
-        }
-    }
     private static boolean tableExists(String tableName) throws SQLException {
         DatabaseMetaData metaData = connection.getMetaData();
         ResultSet resultSet = metaData.getTables(null, null, tableName, null);
@@ -63,9 +58,10 @@ public class MySqlConnector {
     }
 
     private static void createUsersTable() throws SQLException {
-        String createTableQuery = "CREATE TABLE users (UUID VARCHAR(255), blocks INT, nivel INT)";
+        String createTableQuery = "CREATE TABLE users (UUID VARCHAR(255), blocks INT, xp DOUBLE, fortuna INT, britadeira INT, laser INT, raio INT, bonus INT, nivel INT, skin INT)";
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableQuery);
         }
     }
+
 }

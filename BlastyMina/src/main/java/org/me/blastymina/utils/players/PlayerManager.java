@@ -5,6 +5,8 @@ import org.me.blastymina.api.SpawnFirework;
 import org.me.blastymina.api.TitleAPI;
 import org.me.blastymina.database.MySqlUtils;
 
+import java.sql.SQLException;
+
 public class PlayerManager {
     private Player player;
     private Integer blocks;
@@ -15,16 +17,19 @@ public class PlayerManager {
     private Integer laser;
     private Integer raio;
     private Integer bonus;
+    private Integer skin;
 
-    public PlayerManager(Player player, Integer nivel, Integer xp, Integer fortuna, Integer britadeira, Integer laser, Integer raio, Integer bonus) {
+    public PlayerManager(Player player, Integer blocks,Integer nivel, Double xp, Integer fortuna, Integer britadeira, Integer laser, Integer raio, Integer bonus, Integer skin) {
         this.player = player;
         this.nivel = nivel;
+        this.blocks = blocks;
         this.xp = xp;
         this.fortuna = fortuna;
         this.britadeira = britadeira;
         this.laser = laser;
         this.raio = raio;
         this.bonus = bonus;
+        this.skin = skin;
     }
 
     public Player getPlayer() {
@@ -43,6 +48,13 @@ public class PlayerManager {
         this.nivel = nivel;
     }
 
+    public Integer getSkin() {
+        return skin;
+    }
+
+    public void setSkin(Integer skin) {
+        this.skin = skin;
+    }
 
     public Integer getFortuna() {
         return fortuna;
@@ -53,6 +65,7 @@ public class PlayerManager {
     }
 
     public void setBlocks(Integer blocks) {
+
         this.blocks = blocks;
     }
 
@@ -99,7 +112,14 @@ public class PlayerManager {
     public void setBonus(Integer bonus) {
         this.bonus = bonus;
     }
-    public void verifyLevels() {
+    public void onUpXP() {
+        if (xp >= 100) {
+            player.sendMessage("§aParabéns, você alcançou o nível " + (nivel + 1) + "!");
+            xp = 0;
+            nivel++;
+        }
+    }
+    public void verifyLevels() throws SQLException {
         switch (MySqlUtils.getPlayer(player).getNivel()) {
             case 10:
                 player.sendMessage("§aParabéns, você alcançou o nível 10!");

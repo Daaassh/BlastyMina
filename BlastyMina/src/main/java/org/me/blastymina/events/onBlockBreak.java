@@ -20,15 +20,18 @@ import org.me.blastymina.BlastyMina;
 import org.me.blastymina.api.PrimeActionbar;
 import org.me.blastymina.api.TitleAPI;
 import org.me.blastymina.database.MySqlUtils;
+import org.me.blastymina.utils.players.PlayerManager;
 import org.me.blastymina.utils.porcentage.PorcentageManager;
 import org.me.blastymina.utils.rewards.CreateItems;
+
+import java.sql.SQLException;
 
 public class onBlockBreak
 implements Listener {
     private final ProtocolManager protocolManager = BlastyMina.getManager();
 
     @EventHandler
-    public void blockBreak(BlockBreakEvent event) {
+    public void blockBreak(BlockBreakEvent event) throws SQLException {
         Player player = event.getPlayer();
         FileConfiguration config = BlastyMina.getPlugin(BlastyMina.class).getConfig();
         if (player == null || !player.isOnline()) {
@@ -40,13 +43,10 @@ implements Listener {
             if (new PorcentageManager(chance).setup()) {
                 new CreateItems(player);
             }
-            MySqlUtils.getPlayer(player).setXp(MySqlUtils.getPlayer(player).getXP() + (int)BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.blocks.xp-por-block"));
-            MySqlUtils.getPlayer(player).setBlocks(MySqlUtils.getPlayer(player).getBlocks() + 1);
-            MySqlUtils.getPlayer(player).verifyLevels();
-            player.sendMessage(ChatColor.RED + "Blocos: " + MySqlUtils.getPlayer(player).getBlocks());
-            player.sendMessage(ChatColor.RED + "XP: " + MySqlUtils.getPlayer(player).getXP());
+            managerSetup(player);
             Bukkit.getScheduler().runTaskLater(BlastyMina.getPlugin(BlastyMina.class), () -> packetSend(player, event.getBlock()), 1L);
             PrimeActionbar.sendActionbar(player,ChatColor.YELLOW + "Mina | " + ChatColor.translateAlternateColorCodes('&', config.getString("mina.blocks.msg-on-break").replace("{coins}", String.valueOf((int)BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.blocks.coin-por-block")))));
+
         }
     }
 
@@ -59,9 +59,21 @@ implements Listener {
             packet.getBlockPositionModifier().write(0, new BlockPosition(block.getX(), block.getY(), block.getZ()));
             packet.getBlockData().write(0, WrappedBlockData.createData(Material.AIR));
             protocolManager.sendServerPacket(player, packet);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception es) {
+            es.printStackTrace();
             Bukkit.getConsoleSender().sendMessage("\u00a7a[ Blasty Mina ] \u00a7cPacket n\u00e3o foi enviada.");
+        }
+    }
+    private void managerSetup(Player p) throws SQLException {
+        PlayerManager playerManager = MySqlUtils.getPlayer(p);
+        if (playerManager != null) {
+            playerManager.setXp(playerManager.getXP() + (int) BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.blocks.xp-por-block"));
+            playerManager.setBlocks(playerManager.getBlocks() + 1);
+            playerManager.verifyLevels();
+            playerManager.onUpXP();
+            MySqlUtils.updatePlayer(playerManager, p);
+        } else {
+            Bukkit.getLogger().warning("PlayerManager é nulo para o jogador: " + p.getName());
         }
     }
 }
