@@ -16,12 +16,15 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.me.blastymina.BlastyMina;
 import org.me.blastymina.api.TitleAPI;
+import org.me.blastymina.database.MySqlUtils;
+import org.me.blastymina.utils.players.PlayerManager;
 import org.me.blastymina.utils.rewards.EnchantsRewardsManager;
 
 public class BritadeiraEnchant {
     private Player p;
     private PacketContainer packet;
     ProtocolManager manager = BlastyMina.getManager();
+    private PlayerManager playerManager;
     private Block block;
     private TitleAPI api = new TitleAPI();
     private FileConfiguration config = BlastyMina.getPlugin(BlastyMina.class).getConfig();
@@ -57,6 +60,8 @@ public class BritadeiraEnchant {
                     packet.getBlockData().write(0, WrappedBlockData.createData(Material.AIR));
                     manager.sendServerPacket(p,packet);
                     ++blocks;
+                    playerManager = MySqlUtils.getPlayer(p);
+                    playerManager.setBlocks(playerManager.getBlocks() + blocks);
                     new EnchantsRewardsManager(p, blocks, "britadeira");
                 } catch (Exception e) {
                     Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Britadeira ]" + ChatColor.RED +

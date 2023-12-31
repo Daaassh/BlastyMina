@@ -38,7 +38,7 @@ implements CommandExecutor {
             else {
                 p.sendMessage(ChatColor.RED + "Não é possivel setar uma localização sem ser no mundo da mina");
             }
-        } else if (args[0].equalsIgnoreCase("spawn") && p.getWorld().getName().equalsIgnoreCase("mina")) {
+        } else if (args[0].equalsIgnoreCase("spawn")) {
             setSpawn(p);
             p.sendMessage("\u00a7a[ Blasty Mina ]\u00a7aLocal do spawn definido.");
             try {

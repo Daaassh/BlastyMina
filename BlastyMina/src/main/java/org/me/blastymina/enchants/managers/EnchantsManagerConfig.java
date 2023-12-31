@@ -23,6 +23,7 @@ public class EnchantsManagerConfig {
     public List<String> returnLore(){
         List<String> lore = translateColors(config.getStringList("mina.enchants." + enchant + ".item.lore"));
         replaceEnchants(lore);
+        replaceMaxLevel(lore);
         return lore;
     }
     private List<String> translateColors(List<String> input) {
@@ -35,6 +36,13 @@ public class EnchantsManagerConfig {
         for (int i = 0; i < input.size(); i++) {
             String elemento = input.get(i);
             elemento = elemento.replace("{" + enchant + "}", String.valueOf(verifyEnchant(enchant)));
+            input.set(i, elemento);
+        }
+        return input;
+    }
+    private List<String> replaceMaxLevel(List<String> input){
+        for (int i = 0; i < input.size(); i++) {
+            String elemento = input.get(i);
             elemento = elemento.replace("{max_level}", getMaxLevel());
             input.set(i, elemento);
         }

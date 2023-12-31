@@ -25,6 +25,12 @@ implements Listener {
                     new PickaxeInventory(manager).setup();
                 }
             }
+            if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                e.setCancelled(true);
+            }
+            else if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                e.setCancelled(true);
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.me.blastymina.utils.config;
+package org.me.blastymina.utils.mina;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolManager;
@@ -9,10 +9,14 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.me.blastymina.BlastyMina;
+import org.me.blastymina.database.MySqlUtils;
+import org.me.blastymina.events.onBlockBreak;
+import org.me.blastymina.utils.players.PlayerManager;
+
+import java.sql.SQLException;
+import java.util.Random;
 
 public class CuboidManager {
-    private static Material[] tiposBlocos = {Material.COAL_BLOCK, Material.COAL_ORE, Material.STONE, Material.COBBLESTONE};
-    private static double[] probabilidades = {0.01, 0.09, 0.1, 0.5};
     private static ProtocolManager manager = BlastyMina.getManager();
 
     public CuboidManager(Player player) {
@@ -31,12 +35,12 @@ public class CuboidManager {
             for (int y = -metadeTamanho; y <= metadeTamanho; y++) {
                 for (int z = -metadeTamanho; z <= metadeTamanho; z++) {
                     Location loc = new Location(world, locx + x, locy + y, locz + z);
-                    Block block = world.getBlockAt(loc);
-                    PacketContainer packet = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
+                    Block block = loc.getWorld().getBlockAt(loc);
+                    PacketContainer packet = manager.createPacket(PacketType.Play.Server.BLOCK_CHANGE);
                     packet.getBlockPositionModifier().write(0, new BlockPosition(block.getX(), block.getY(), block.getZ()));
-                    packet.getBlockData().write(0, WrappedBlockData.createData(Material.AIR));
+                    packet.getBlockData().write(0, WrappedBlockData.createData(Material.STONE));
                     try {
-                        Bukkit.getScheduler().runTaskLater(BlastyMina.getPlugin(BlastyMina.class), () -> manager.sendServerPacket(player, packet), 1L);
+                        Bukkit.getScheduler().runTaskLater(BlastyMina.getPlugin(BlastyMina.class), () -> manager.sendServerPacket(player, packet), 20);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -46,18 +50,8 @@ public class CuboidManager {
         Bukkit.getConsoleSender().sendMessage("\u00a7a[ Blasty Mina ] \u00a7cMina foi resetada..");
     }
 
-    private Material randomBlock(double numeroAleatorio) {
-        double acumulado = 0.0;
-
-        for (int i = 0; i < tiposBlocos.length; i++) {
-            acumulado += probabilidades[i];
-            if (numeroAleatorio <= acumulado) {
-                return tiposBlocos[i];
-            }
-        }
-
-        // Se não foi selecionado um bloco, retorne o último tipo de bloco
-        return tiposBlocos[tiposBlocos.length - 1];
+    private void getMaterials(Player p) throws SQLException {
+        new BlocksManager(MySqlUtils.getPlayer(p), new Random().nextDouble());
     }
 }
 

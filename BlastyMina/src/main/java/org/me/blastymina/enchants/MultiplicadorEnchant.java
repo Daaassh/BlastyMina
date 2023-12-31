@@ -17,7 +17,8 @@ public class MultiplicadorEnchant {
             manager.setBlocks(manager.getBlocks() + blocks);
         }
         else {
-            manager.setBlocks(blocks * manager.getMultiplicador());
+            int newBlocks = manager.getMultiplicador() * blocks;
+            manager.setBlocks(newBlocks + manager.getBlocks());
         }
     }
 }

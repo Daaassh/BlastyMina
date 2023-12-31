@@ -8,42 +8,28 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.me.blastymina.api.TitleAPI;
-import org.me.blastymina.utils.PacketsManager;
+import org.me.blastymina.database.MySqlUtils;
+import org.me.blastymina.inventories.managers.ManagerInventory;
+import org.me.blastymina.inventories.pickaxe.CreatePickaxe;
 import org.me.blastymina.utils.SendPlayerToSpawn;
-import org.me.blastymina.utils.config.CuboidManager;
+import org.me.blastymina.utils.mina.CuboidManager;
+
+import java.sql.SQLException;
 
 public class onInventoryClick
 implements Listener {
-    TitleAPI api = new TitleAPI();
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
+    public void onInventoryClick(InventoryClickEvent e) throws SQLException {
+        Player p = (Player)e.getWhoClicked();
+        ManagerInventory managers = new ManagerInventory(MySqlUtils.getPlayer(p), e.getCurrentItem(), p);
         if (e.getClickedInventory().getName().equalsIgnoreCase("§cMina")) {
-            Player p = (Player)e.getWhoClicked();
-            switch (e.getCurrentItem().getType()) {
-                case DIAMOND_ORE: {
-                    p.closeInventory();
-                    try {
-                        p.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(5, 999));
-                        new CuboidManager(p);
-                        api.sendFullTitle(p, 5, 5, 10, "§c§lMina", "§c§lSua mina esta sendo criada, Aguarde alguns segundos.");
-                        new SendPlayerToSpawn(p);
-                    }
-                    catch (Exception es) {
-                        api.sendFullTitle(p, 5, 5, 10, "§c§lMina", "§c§lErro ao enviar você para a mina.!");
-                        es.printStackTrace();
-                    }
-                    break;
-                }
-                case DIAMOND_PICKAXE: {
-                    p.sendMessage(ChatColor.RED + "Em breve...");
-                    p.closeInventory();
-                    break;
-                }
-            }
+            managers.registerMinaEventInventory();
         }
-        else {
-            return;
+        else if(e.getClickedInventory().getName().equalsIgnoreCase(ChatColor.GRAY + "Sua picareta")) {
+            managers.registerPickaxeEventInventory();
         }
+
     }
+
 }
 

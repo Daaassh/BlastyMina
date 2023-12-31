@@ -3,6 +3,13 @@ mina:
       width: 25
       world: "mina"
     blocks:
+      material:
+        COAL_BLOCK:
+          nivel: 0
+          porcentage: 0.4
+        CoAL_ORE:
+          nivel: 5
+          porcentage: 10.5
       xp-por-block: 1.0
       msg-on-break: "&bMina | &cVocê quebrou um bloco é recebeu {coins} coins"
       coin-por-block: 124.0
@@ -68,6 +75,7 @@ mina:
             - "| &bBotão Direito: Escolher quantia"
             - "| &bScroll: Upar o maximo possivel"
         max-level: 100
+        initial-cost: 150000
         width: 15
         rewards:
           multiply: 5.0
@@ -84,6 +92,7 @@ mina:
             - "| &bBotão Direito: Escolher quantia"
             - "| &bScroll: Upar o maximo possivel"
         max-level: 25
+        initial-cost: 1000
         distance: 25
         rewards:
           multiply: 0.1
@@ -100,6 +109,7 @@ mina:
             - "| &bBotão Direito: Escolher quantia"
             - "| &bScroll: Upar o maximo possivel"
         max-level: 100
+        initial-cost: 150000
         multiply: 100.0
       bonus:
         item:
@@ -114,6 +124,7 @@ mina:
             - "| &bBotão Direito: Escolher quantia"
             - "| &bScroll: Upar o maximo possivel"
         max-level: 100
+        initial-cost: 250
         multiply: 10.0
       explosao:
         item:
@@ -128,6 +139,7 @@ mina:
             - "| &bBotão Direito: Escolher quantia"
             - "| &bScroll: Upar o maximo possivel"
         max-level: 100
+        initial-cost: 250
         width: 3
         rewards:
           multiply: 5.0
@@ -144,6 +156,7 @@ mina:
             - "| &bBotão Direito: Escolher quantia"
             - "| &bScroll: Upar o maximo possivel"
         max-level: 100
+        initial-cost: 250
         multiply: 5.0
       velocidade:
         item:
@@ -158,6 +171,7 @@ mina:
             - "| &bBotão Direito: Escolher quantia"
             - "| &bScroll: Upar o maximo possivel"
         max-level: 2
+        initial-cost: 250
       xpbooster:
         item:
           name: "&cXp Booster"
@@ -171,6 +185,7 @@ mina:
             - "| &bBotão Direito: Escolher quantia"
             - "| &bScroll: Upar o maximo possivel"
         max-level: 100
+        initial-cost: 250
         multiply: 2.0
       raio:
         item:
@@ -185,6 +200,7 @@ mina:
             - "| &bBotão Direito: Escolher quantia"
             - "| &bScroll: Upar o maximo possivel"
         max-level: 100
+        initial-cost: 250
         distance: 25
         rewards:
           multiply: 0.1

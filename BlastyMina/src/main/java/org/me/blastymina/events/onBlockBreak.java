@@ -8,6 +8,7 @@ import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.WrappedBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -27,7 +28,7 @@ import java.sql.SQLException;
 
 public class onBlockBreak
 implements Listener {
-    private final ProtocolManager protocolManager = BlastyMina.getManager();
+    private static final ProtocolManager protocolManager = BlastyMina.getManager();
 
     @EventHandler
     public void blockBreak(BlockBreakEvent event) throws SQLException {
@@ -36,20 +37,21 @@ implements Listener {
         if (player == null || !player.isOnline()) {
             return;
         }
-        if (player.getWorld().getName().equalsIgnoreCase("mina") && event.getBlock().getType() == Material.STONE) {
+        if (player.getWorld().getName().equalsIgnoreCase("mina") && event.getBlock().getType() == Material.AIR) {
             event.setCancelled(true);
             double chance = enchantBonus(player);
             if (new PorcentageManager(chance).setup()) {
                 new CreateItems(player);
             }
             managerSetup(player);
+            enchantBritadeira(player);
             Bukkit.getScheduler().runTaskLater(BlastyMina.getPlugin(BlastyMina.class), () -> packetSend(player, event.getBlock()), 1L);
             PrimeActionbar.sendActionbar(player, ChatColor.translateAlternateColorCodes('&', config.getString("mina.blocks.msg-on-break").replace("{coins}", String.valueOf(enchantFortune(player)))));
 
         }
     }
 
-    private void packetSend(Player player, Block block) {
+    private static void packetSend(Player player, Block block) {
         if (player == null || !player.isOnline()) {
             return;
         }
@@ -82,6 +84,10 @@ implements Listener {
     private Double enchantBonus(Player player) throws SQLException {
         PlayerManager manager = MySqlUtils.getPlayer(player);
         return new BonusEnchant(manager).setup();
+    }
+    private void enchantBritadeira(Player player){
+        Location loc = new Location(player.getWorld(), player.getLocation().getX(), player.getLocation().getY() - 2, player.getLocation().getZ());
+        new BritadeiraEnchant(player, player.getWorld().getBlockAt(loc));
     }
 }
 

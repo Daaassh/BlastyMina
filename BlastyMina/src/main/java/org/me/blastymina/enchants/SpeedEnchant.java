@@ -14,7 +14,7 @@ public class SpeedEnchant {
     private void setup(){
         Integer lvl = manager.getVelocidade();
         try {
-            manager.getPlayer().addPotionEffect(new org.bukkit.potion.PotionEffect(PotionEffectType.SPEED, 20 * lvl, lvl));
+            manager.getPlayer().addPotionEffect(new org.bukkit.potion.PotionEffect(PotionEffectType.SPEED, 20 * lvl, 2));
         }catch (Exception e){
             e.printStackTrace();
             Bukkit.getConsoleSender().sendMessage("§cErro ao adicionar velocidade ao jogador " + manager.getPlayer().getName());
