@@ -57,7 +57,7 @@ public class BlastyExpansion extends PlaceholderExpansion  {
             return "" + manager.getNivel();
         }
         if (params.equalsIgnoreCase("xp")) {
-            return "" + manager.getXP();
+            return "" + String.valueOf(manager.getXP());
         }
         return null;
     }

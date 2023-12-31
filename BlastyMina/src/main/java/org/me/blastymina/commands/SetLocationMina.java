@@ -5,19 +5,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.me.blastymina.BlastyMina;
-import org.me.blastymina.utils.LocationConfig;
+import org.me.blastymina.database.MySqlUtils;
+import org.me.blastymina.utils.players.PlayerManager;
+
+import java.sql.SQLException;
 
 public class SetLocationMina
 implements CommandExecutor {
-    private LocationConfig createConfig = new LocationConfig(BlastyMina.getPlugin(BlastyMina.class));
+    FileConfiguration config = BlastyMina.getPlugin(BlastyMina.class).getConfig();
 
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("\u00a7a[ Blasty Mina ]\u00a7cComando apenas para players.");
-            return false;
-        }
+        PlayerManager manager;
         Player p = (Player)sender;
         if (args[0].isEmpty()) {
             p.sendMessage("\u00a7a[ Blasty Mina ]\u00a7cArgumentos vazio.");
@@ -28,8 +29,8 @@ implements CommandExecutor {
                 setMina(p);
                 p.sendMessage("\u00a7a[ Blasty Mina ]\u00a7aLocal da mina definida.");
                 try {
-                    createConfig.saveConfig();
-                    createConfig.reload();
+                    BlastyMina.getPlugin(BlastyMina.class).saveConfig();
+                    BlastyMina.getPlugin(BlastyMina.class).reloadConfig();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -41,8 +42,8 @@ implements CommandExecutor {
             setSpawn(p);
             p.sendMessage("\u00a7a[ Blasty Mina ]\u00a7aLocal do spawn definido.");
             try {
-                createConfig.saveConfig();
-                createConfig.reload();
+                BlastyMina.getPlugin(BlastyMina.class).saveConfig();
+                BlastyMina.getPlugin(BlastyMina.class).reloadConfig();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -50,19 +51,46 @@ implements CommandExecutor {
             BlastyMina.getPlugin(BlastyMina.class).reloadConfig();
             p.sendMessage(ChatColor.GREEN + "Config recarregada");
         }
+        try {
+            manager = MySqlUtils.getPlayer(p);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (args[0].equalsIgnoreCase("blocos")) {
+            p.sendMessage(ChatColor.GREEN + "O seu total de blocos e: " + manager.getBlocks());
+        }
+        else if(args[0].equalsIgnoreCase("set")){
+            if (args[1].isEmpty() || args[2].isEmpty() || args[3].isEmpty()) {
+                p.sendMessage(ChatColor.RED + "\u00a7cUso correto: /minaadm set <player> <blocos> <valor>");
+                return false;
+            }
+            if(args[2].equalsIgnoreCase("blocos")){
+                Player ps = p.getServer().getPlayer(args[1]);
+                manager.setBlocks(manager.getBlocks() + Integer.parseInt(args[3]));
+                MySqlUtils.updatePlayer(manager, ps);
+                ps.sendMessage(ChatColor.GREEN + "Seu novo total de blocos e: " + manager.getBlocks());
+            }
+            else if (args[2].equalsIgnoreCase("nivel")) {
+                Player ps = p.getServer().getPlayer(args[1]);
+                manager.setNivel(manager.getNivel() + Integer.parseInt(args[3]));
+                MySqlUtils.updatePlayer(manager, ps);
+                ps.sendMessage(ChatColor.GREEN + "Seu novo total de blocos e: " + manager.getBlocks());
+            }
+        }
         return false;
     }
     private void setMina(Player p){
-        createConfig.set("mina.location.x", p.getLocation().getX());
-        createConfig.set("mina.location.y", p.getLocation().getY());
-        createConfig.set("mina.location.z", p.getLocation().getZ());
-        createConfig.setWorld("mina.location.world", p.getLocation().getWorld().getName());
+        config.set("mina.location.mina.x", p.getLocation().getX());
+        config.set("mina.location.mina.y", p.getLocation().getY());
+        config.set("mina.location.mina.z", p.getLocation().getZ());
+        config.set("mina.location.mina.world", p.getLocation().getWorld().getName());
     }
     private void setSpawn(Player p) {
-        createConfig.set("spawn.location.x", p.getLocation().getX());
-        createConfig.set("spawn.location.y", p.getLocation().getY());
-        createConfig.set("spawn.location.z", p.getLocation().getZ());
-        createConfig.setWorld("spawn.location.world",p.getLocation().getWorld().getName());
+        config.set("mina.location.spawn.x", p.getLocation().getX());
+        config.set("mina.location.spawn.y", p.getLocation().getY());
+        config.set("mina.location.spawn.z", p.getLocation().getZ());
+        config.set("mina.location.spawn.world", p.getLocation().getWorld().getName());
     }
 }
 

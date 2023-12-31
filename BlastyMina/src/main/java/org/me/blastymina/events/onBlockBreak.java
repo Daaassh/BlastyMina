@@ -15,11 +15,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.plugin.Plugin;
 import org.me.blastymina.BlastyMina;
 import org.me.blastymina.api.PrimeActionbar;
-import org.me.blastymina.api.TitleAPI;
 import org.me.blastymina.database.MySqlUtils;
+import org.me.blastymina.enchants.*;
 import org.me.blastymina.utils.players.PlayerManager;
 import org.me.blastymina.utils.porcentage.PorcentageManager;
 import org.me.blastymina.utils.rewards.CreateItems;
@@ -39,13 +38,13 @@ implements Listener {
         }
         if (player.getWorld().getName().equalsIgnoreCase("mina") && event.getBlock().getType() == Material.STONE) {
             event.setCancelled(true);
-            double chance = BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.rewards.chance");
+            double chance = enchantBonus(player);
             if (new PorcentageManager(chance).setup()) {
                 new CreateItems(player);
             }
             managerSetup(player);
             Bukkit.getScheduler().runTaskLater(BlastyMina.getPlugin(BlastyMina.class), () -> packetSend(player, event.getBlock()), 1L);
-            PrimeActionbar.sendActionbar(player,ChatColor.YELLOW + "Mina | " + ChatColor.translateAlternateColorCodes('&', config.getString("mina.blocks.msg-on-break").replace("{coins}", String.valueOf((int)BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.blocks.coin-por-block")))));
+            PrimeActionbar.sendActionbar(player, ChatColor.translateAlternateColorCodes('&', config.getString("mina.blocks.msg-on-break").replace("{coins}", String.valueOf(enchantFortune(player)))));
 
         }
     }
@@ -67,14 +66,22 @@ implements Listener {
     private void managerSetup(Player p) throws SQLException {
         PlayerManager playerManager = MySqlUtils.getPlayer(p);
         if (playerManager != null) {
-            playerManager.setXp(playerManager.getXP() + (int) BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.blocks.xp-por-block"));
-            playerManager.setBlocks(playerManager.getBlocks() + 1);
-            playerManager.verifyLevels();
+            new SpeedEnchant(MySqlUtils.getPlayer(p));
+            new MultiplicadorEnchant(playerManager, 1);
+            playerManager.setXp(playerManager.getXP() + BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.blocks.xp-por-block"));
             playerManager.onUpXP();
             MySqlUtils.updatePlayer(playerManager, p);
         } else {
             Bukkit.getLogger().warning("PlayerManager é nulo para o jogador: " + p.getName());
         }
+    }
+    private Double enchantFortune(Player player) throws SQLException {
+        PlayerManager manager = MySqlUtils.getPlayer(player);
+        return new FortuneEnchant(manager).setup();
+    }
+    private Double enchantBonus(Player player) throws SQLException {
+        PlayerManager manager = MySqlUtils.getPlayer(player);
+        return new BonusEnchant(manager).setup();
     }
 }
 

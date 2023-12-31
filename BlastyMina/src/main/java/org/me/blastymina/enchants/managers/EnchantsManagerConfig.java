@@ -1,4 +1,4 @@
-package org.me.blastymina.enchants;
+package org.me.blastymina.enchants.managers;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;

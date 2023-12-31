@@ -1,5 +1,7 @@
 package org.me.blastymina.inventories.pickaxe;
 
+import com.sun.tools.javac.code.Attribute;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -7,7 +9,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.me.blastymina.BlastyMina;
 import org.me.blastymina.utils.players.PlayerManager;
+import sun.jvm.hotspot.oops.Array;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class CreatePickaxe {
@@ -22,7 +26,13 @@ public class CreatePickaxe {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', config.getString("mina.pickaxe.name")));
         meta.setLore(returnLore());
-        meta.setUnbreakable(true);
+        try {
+            meta.spigot().setUnbreakable(true);
+        }
+        catch (Exception e) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA+ "[ Blasty Mina ] " + ChatColor.RED + "Erro ao setar unbreakable no item!");
+            e.printStackTrace();
+        }
         item.setItemMeta(meta);
         return item;
     }
@@ -40,27 +50,34 @@ public class CreatePickaxe {
         }
         return null;
     }
-    public List<String> returnLore(){
+    public List<String> returnLore() {
         List<String> lore = translateColors(config.getStringList("mina.pickaxe.lore"));
         replaceEnchants(lore);
         return lore;
     }
 
+    private void replaceEnchants(List<String> input) {
+        for (int i = 0; i < input.size(); i++) {
+            String elemento = input.get(i);
+            for (String enchant : getEnchantments()) {
+                elemento = elemento.replace("{" + enchant + "}", String.valueOf(verifyEnchant(enchant)));
+                elemento = elemento.replace("{max_level}", getMaxLevel());
+            }
+
+            input.set(i, elemento);
+        }
+    }
     private List<String> translateColors(List<String> input) {
         for (int i = 0; i < input.size(); i++) {
             input.set(i, ChatColor.translateAlternateColorCodes('&', input.get(i)));
         }
         return input;
     }
-    private List<String> replaceEnchants(List<String> input){
-        for (int i = 0; i < input.size(); i++) {
-            String elemento = input.get(i);
-            elemento = elemento.replace("{" + enchant + "}", String.valueOf(verifyEnchant(enchant)));
-            elemento = elemento.replace("{max_level}", getMaxLevel());
-            input.set(i, elemento);
-        }
-        return input;
+
+    private List<String> getEnchantments() {
+        return Arrays.asList("fortuna", "britadeira", "raio", "bonus", "laser", "explosao", "multiplicador", "velocidade", "xpbooster");
     }
+
     private int verifyEnchant(String enchant){
         switch (enchant) {
             case "fortuna":

@@ -1,9 +1,10 @@
 mina:
     location:
+      width: 25
       world: "mina"
     blocks:
       xp-por-block: 1.0
-      msg-on-break: "&cVocê quebrou um bloco é recebeu {coins} coins"
+      msg-on-break: "&bMina | &cVocê quebrou um bloco é recebeu {coins} coins"
       coin-por-block: 124.0
     rewards:
       chance: 10.0

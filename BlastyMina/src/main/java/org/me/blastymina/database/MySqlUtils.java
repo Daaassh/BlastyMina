@@ -28,7 +28,7 @@ public class MySqlUtils {
     }
 
     public static void savePlayer(Player p) throws SQLException {
-        String query = "INSERT INTO users (uuid, velocidade,xpbooster,blocks,multiplicador,explosao,nivel, xp, fortuna, britadeira,laser,raio,bonus, skin) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        String query = "INSERT INTO users (uuid, velocidade,xpbooster,blocks,multiplicador,explosao,nivel, xp, fortuna, britadeira,laser,raio,bonus, skin) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement collection = connection.prepareStatement(query);
             collection.setString(1, String.valueOf(p.getUniqueId()));
@@ -91,7 +91,7 @@ public class MySqlUtils {
                     int velocidade = results.getInt("velocidade");
                     int xpbooster = results.getInt("xpbooster");
                     int multiplicador = results.getInt("multiplicador");
-                    int explosao = results.getInt("explosão");
+                    int explosao = results.getInt("explosao");
                     int blocks = results.getInt("blocks");
                     double xp = results.getDouble("xp");
                     int fortuna = results.getInt("fortuna");

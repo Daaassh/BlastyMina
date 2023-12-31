@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.me.blastymina.enchants.EnchantsManagerConfig;
+import org.me.blastymina.enchants.managers.EnchantsManagerConfig;
 import org.me.blastymina.utils.players.PlayerManager;
 
 public class PickaxeInventory {
@@ -19,16 +19,17 @@ public class PickaxeInventory {
 
     public void setup(){
         Inventory inv = Bukkit.createInventory(manager.getPlayer(), 9*5, ChatColor.GRAY + "Sua picareta");
-        inv.setItem(11, new CreatePickaxe(manager).setup());
-        inv.setItem(27, new ItemStack(Material.DARK_OAK_DOOR));
-        inv.setItem(13, createItemEnchant("fortuna", Material.EMERALD_ORE));
-        inv.setItem(14, createItemEnchant("multiplicador", Material.GOLD_ORE));
-        inv.setItem(21, createItemEnchant("xpbooster", Material.EXP_BOTTLE));
-        inv.setItem(22, createItemEnchant("bonus", Material.GOLD_BOOTS));
+        inv.setItem(10, new CreatePickaxe(manager).setup());
+        inv.setItem(28, new ItemStack(Material.WOOD_DOOR));
+        inv.setItem(12, createItemEnchant("fortuna", Material.EMERALD));
+        inv.setItem(13, createItemEnchant("multiplicador", Material.GOLD_ORE));
+        inv.setItem(14, createItemEnchant("xpbooster", Material.EXP_BOTTLE));
+        inv.setItem(21, createItemEnchant("bonus", Material.TRIPWIRE_HOOK));
+        inv.setItem(22, createItemEnchant("velocidade", Material.GOLD_BOOTS));
         inv.setItem(23, createItemEnchant("britadeira", Material.HOPPER));
-        inv.setItem(30, createItemEnchant("explosao", Material.TNT));
-        inv.setItem(31, createItemEnchant("raio", Material.BLAZE_ROD));
-        inv.setItem(32, createItemEnchant("laser", Material.ENDER_PEARL));
+        inv.setItem(30, createItemEnchant("laser", Material.GHAST_TEAR));
+        inv.setItem(31, createItemEnchant("explosao", Material.TNT));
+        inv.setItem(32, createItemEnchant("raio", Material.BLAZE_ROD));
         manager.getPlayer().openInventory(inv);
     }
 

@@ -51,7 +51,6 @@ public class BritadeiraEnchant {
                 PacketContainer packet = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
                 packet.getBlockPositionModifier().write(0, new BlockPosition(j, block.getY(), h));
                 packet.getBlockData().write(0, WrappedBlockData.createData(Material.AIR));
-
                 try {
                     manager.sendServerPacket(p, packet);
                     packet.getBlockPositionModifier().write(0, new BlockPosition(j, block.getY(), h));
