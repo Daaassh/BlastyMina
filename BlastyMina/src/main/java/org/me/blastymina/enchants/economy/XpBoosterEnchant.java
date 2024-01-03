@@ -1,4 +1,4 @@
-package org.me.blastymina.enchants;
+package org.me.blastymina.enchants.economy;
 
 import org.me.blastymina.BlastyMina;
 import org.me.blastymina.utils.players.PlayerManager;

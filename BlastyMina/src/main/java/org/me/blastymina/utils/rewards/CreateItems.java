@@ -4,30 +4,32 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.me.blastymina.BlastyMina;
 import org.me.blastymina.api.TitleAPI;
+import org.me.blastymina.configs.CustomFileConfiguration;
 import org.me.blastymina.utils.porcentage.PorcentageManager;
 
+import java.io.IOException;
 import java.util.List;
 
 public class CreateItems {
     private Player player;
     private TitleAPI api = new TitleAPI();
 
-    public CreateItems(Player player) {
+    public CreateItems(Player player) throws IOException, InvalidConfigurationException {
         this.player = player;
         setup();
     }
 
-    private void setup() {
+    private void setup() throws IOException, InvalidConfigurationException {
         BlastyMina plugin = BlastyMina.getPlugin(BlastyMina.class);
-        FileConfiguration config = plugin.getConfig();
+        CustomFileConfiguration config = new CustomFileConfiguration("rewards.yml", plugin);
 
-        String sectionName = "mina.rewards.itens";
+        String sectionName = "rewards.itens";
 
         ConfigurationSection section = config.getConfigurationSection(sectionName);
         if (section != null) {
@@ -71,9 +73,7 @@ public class CreateItems {
     }
 
     private List<String> translateColors(List<String> input) {
-        for (int i = 0; i < input.size(); i++) {
-            input.set(i, ChatColor.translateAlternateColorCodes('&', input.get(i)));
-        }
+        input.replaceAll(textToTranslate -> ChatColor.translateAlternateColorCodes('&', textToTranslate));
         return input;
     }
 }

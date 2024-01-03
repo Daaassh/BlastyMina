@@ -1,6 +1,5 @@
-package org.me.blastymina.enchants;
+package org.me.blastymina.enchants.economy;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.me.blastymina.BlastyMina;
 import org.me.blastymina.utils.players.PlayerManager;

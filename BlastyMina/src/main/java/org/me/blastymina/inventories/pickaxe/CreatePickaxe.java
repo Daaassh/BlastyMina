@@ -18,7 +18,7 @@ public class CreatePickaxe {
     private PlayerManager manager;
     private String enchant;
     private FileConfiguration config = BlastyMina.getPlugin(BlastyMina.class).getConfig();
-    public CreatePickaxe(PlayerManager manager){
+    public CreatePickaxe(PlayerManager manager) {
         this.manager = manager;
     }
     public ItemStack setup(){
@@ -53,6 +53,7 @@ public class CreatePickaxe {
     public List<String> returnLore() {
         List<String> lore = translateColors(config.getStringList("mina.pickaxe.lore"));
         replaceEnchants(lore);
+        replaceMaxLevel(lore);
         return lore;
     }
 
@@ -61,9 +62,14 @@ public class CreatePickaxe {
             String elemento = input.get(i);
             for (String enchant : getEnchantments()) {
                 elemento = elemento.replace("{" + enchant + "}", String.valueOf(verifyEnchant(enchant)));
-                elemento = elemento.replace("{max_level}", getMaxLevel());
             }
-
+            input.set(i, elemento);
+        }
+    }
+    private void replaceMaxLevel(List<String> input) {
+        for (int i = 0; i < input.size(); i++) {
+            String elemento = input.get(i);
+            elemento = elemento.replace("{max_level}", getMaxLevel());
             input.set(i, elemento);
         }
     }

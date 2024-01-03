@@ -3,10 +3,8 @@ package org.me.blastymina.utils.porcentage;
 
 import java.util.Random;
 
-import java.util.Random;
-
 public class PorcentageManager {
-    private double percentage;
+    private final double percentage;
 
     public PorcentageManager(double percentage) {
         if (percentage < 0.0 || percentage > 100.0) {
@@ -24,5 +22,3 @@ public class PorcentageManager {
         return chance <= percentage;
     }
 }
-
-

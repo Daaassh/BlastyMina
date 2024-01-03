@@ -3,17 +3,24 @@ package org.me.blastymina.utils.porcentage;
 import java.util.Random;
 
 public class PorcentageEnchantsManager {
-    private double percentage;
+    private final Double percentage;
 
-    public PorcentageEnchantsManager(double percentage) {
+    public PorcentageEnchantsManager(Double percentage) {
         this.percentage = percentage;
+        setup();
     }
-
 
     public boolean setup() {
-        Random random = new Random();
-        double chance = random.nextDouble() * 10000.0;
+        return verificarPorcentagem(gerarValorAleatorio());
+    }
 
-        return chance <= percentage;
+    private boolean verificarPorcentagem(double valor) {
+        return valor > percentage;
+    }
+
+    private double gerarValorAleatorio() {
+        Random random = new Random();
+        return random.nextDouble() * (100 - 0.00001) + 0.00001;
     }
 }
+

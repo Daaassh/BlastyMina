@@ -8,9 +8,9 @@ import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.WrappedBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,11 +19,23 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.me.blastymina.BlastyMina;
 import org.me.blastymina.api.PrimeActionbar;
 import org.me.blastymina.database.MySqlUtils;
-import org.me.blastymina.enchants.*;
+import org.me.blastymina.enchants.managers.EnchantsManager;
+import org.me.blastymina.enchants.economy.BonusEnchant;
+import org.me.blastymina.enchants.economy.FortuneEnchant;
+import org.me.blastymina.enchants.economy.MultiplicadorEnchant;
+import org.me.blastymina.enchants.functions.SpeedEnchant;
+import org.me.blastymina.enchants.managers.EnchantsManagerConfig;
+import org.me.blastymina.enchants.specials.BritadeiraEnchant;
+import org.me.blastymina.enchants.specials.ExplosionEnchant;
+import org.me.blastymina.enchants.specials.LaserEnchant;
+import org.me.blastymina.enchants.specials.RaioEnchant;
 import org.me.blastymina.utils.players.PlayerManager;
+import org.me.blastymina.utils.porcentage.PorcentageEnchantsManager;
 import org.me.blastymina.utils.porcentage.PorcentageManager;
 import org.me.blastymina.utils.rewards.CreateItems;
+import org.me.blastymina.utils.rewards.EnchantsRewardsManager;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class onBlockBreak
@@ -31,7 +43,7 @@ implements Listener {
     private static final ProtocolManager protocolManager = BlastyMina.getManager();
 
     @EventHandler
-    public void blockBreak(BlockBreakEvent event) throws SQLException {
+    public void blockBreak(BlockBreakEvent event) throws SQLException, IOException, InvalidConfigurationException {
         Player player = event.getPlayer();
         FileConfiguration config = BlastyMina.getPlugin(BlastyMina.class).getConfig();
         if (player == null || !player.isOnline()) {
@@ -44,7 +56,7 @@ implements Listener {
                 new CreateItems(player);
             }
             managerSetup(player);
-            enchantBritadeira(player);
+            enchantsSetup(player, event.getBlock());
             Bukkit.getScheduler().runTaskLater(BlastyMina.getPlugin(BlastyMina.class), () -> packetSend(player, event.getBlock()), 1L);
             PrimeActionbar.sendActionbar(player, ChatColor.translateAlternateColorCodes('&', config.getString("mina.blocks.msg-on-break").replace("{coins}", String.valueOf(enchantFortune(player)))));
 
@@ -85,9 +97,17 @@ implements Listener {
         PlayerManager manager = MySqlUtils.getPlayer(player);
         return new BonusEnchant(manager).setup();
     }
-    private void enchantBritadeira(Player player){
-        Location loc = new Location(player.getWorld(), player.getLocation().getX(), player.getLocation().getY() - 2, player.getLocation().getZ());
-        new BritadeiraEnchant(player, player.getWorld().getBlockAt(loc));
+
+    private void enchantsSetup(Player p, Block block) throws SQLException, IOException, InvalidConfigurationException {
+        if (new PorcentageEnchantsManager(10.0).setup()) {
+            new ExplosionEnchant(p, block);
+        }
+        else if (new PorcentageEnchantsManager(20.0).setup()) {
+            new BritadeiraEnchant(p, block);
+        }
+        else if (new PorcentageEnchantsManager(30.0).setup()) {
+            new RaioEnchant(p, block);
+        }
     }
 }
 

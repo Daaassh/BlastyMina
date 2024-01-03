@@ -3,21 +3,24 @@ package org.me.blastymina.inventories.pickaxe;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.me.blastymina.enchants.managers.EnchantsManagerConfig;
 import org.me.blastymina.utils.players.PlayerManager;
 
+import java.io.IOException;
+
 public class PickaxeInventory {
     private PlayerManager manager;
 
-    public PickaxeInventory(PlayerManager manager) {
+    public PickaxeInventory(PlayerManager manager) throws IOException, InvalidConfigurationException {
         this.manager = manager;
         setup();
     }
 
-    public void setup(){
+    public void setup() throws IOException, InvalidConfigurationException {
         Inventory inv = Bukkit.createInventory(manager.getPlayer(), 9*5, ChatColor.GRAY + "Sua picareta");
         inv.setItem(10, new CreatePickaxe(manager).setup());
         inv.setItem(28, new ItemStack(Material.WOOD_DOOR));
@@ -34,7 +37,7 @@ public class PickaxeInventory {
     }
 
 
-    private ItemStack createItemEnchant(String enchant, Material material){
+    private ItemStack createItemEnchant(String enchant, Material material) throws IOException, InvalidConfigurationException {
         EnchantsManagerConfig enchantManager = new EnchantsManagerConfig(manager, enchant);
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();

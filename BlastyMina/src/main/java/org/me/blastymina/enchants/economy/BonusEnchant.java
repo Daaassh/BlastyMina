@@ -1,4 +1,4 @@
-package org.me.blastymina.enchants;
+package org.me.blastymina.enchants.economy;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.me.blastymina.BlastyMina;

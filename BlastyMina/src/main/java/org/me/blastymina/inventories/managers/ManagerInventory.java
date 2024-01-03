@@ -1,39 +1,49 @@
 package org.me.blastymina.inventories.managers;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.me.blastymina.BlastyMina;
 import org.me.blastymina.api.TitleAPI;
+import org.me.blastymina.configs.CustomFileConfiguration;
 import org.me.blastymina.database.MySqlUtils;
 import org.me.blastymina.inventories.pickaxe.CreatePickaxe;
 import org.me.blastymina.inventories.pickaxe.PickaxeInventory;
+import org.me.blastymina.inventories.skins.SkinInventory;
+import org.me.blastymina.inventories.skins.SkinManagers;
 import org.me.blastymina.utils.SendPlayerToSpawn;
 import org.me.blastymina.utils.mina.CuboidManager;
 import org.me.blastymina.utils.players.PlayerManager;
 
+import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.UUID;
+
+import static org.me.blastymina.inventories.skins.SkinManagers.setEnchant;
 
 public class ManagerInventory {
-    private ItemStack item;
-    private Player player;
-    private PlayerManager manager;
-    private FileConfiguration config = BlastyMina.getPlugin(BlastyMina.class).getConfig();
+    private final ItemStack item;
+    private final Player player;
+    private final PlayerManager manager;
+    private HashMap<UUID, Player> players = new HashMap<>();
+    private final CustomFileConfiguration config = new CustomFileConfiguration("config.yml", BlastyMina.getPlugin(BlastyMina.class));
     TitleAPI api = new TitleAPI();
 
 
-    public ManagerInventory(PlayerManager manager,ItemStack item, Player player){
+    public ManagerInventory(PlayerManager manager,ItemStack item, Player player) throws IOException, InvalidConfigurationException {
         this.item = item;
         this.player = player;
         this.manager = manager;
     }
 
 
-    public void registerPickaxeEventInventory() throws SQLException {
+    public void registerPickaxeEventInventory() throws SQLException, IOException, InvalidConfigurationException {
         switch (item.getType()) {
             case EMERALD:
                 onBuy("fortuna", "§6§lFortuna");
@@ -70,15 +80,20 @@ public class ManagerInventory {
             case DIAMOND_ORE: {
                 player.closeInventory();
                 try {
-                    if (ifItemInInventory(player)) {
-                        player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(5, 999));
-                        new CuboidManager(player);
-                        api.sendFullTitle(player, 5, 5, 10, "§c§lMina", "§c§lSua mina esta sendo criada, Aguarde alguns segundos.");
-                        player.getInventory().setItem(5, new CreatePickaxe(MySqlUtils.getPlayer(player)).setup());
-                        new SendPlayerToSpawn(player);
+                    if (players.containsKey(player.getUniqueId())) {
+                        unHide(player);
+                        player.teleport(Bukkit.getWorld("world").getSpawnLocation());
+                        player.sendMessage(ChatColor.AQUA + "[ Mina ] " + ChatColor.GREEN + "Voce foi teleportado para o spawn.");
+                        players.remove(player.getUniqueId());
                     }
                     else {
-                        player.sendMessage(ChatColor.RED + "Esvazie seu inventário antes de ir para a mina.");
+                        player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(20 * 10, 999));
+                        new CuboidManager(player);
+                        api.sendFullTitle(player, 5, 5, 15, "§c§lMina", "§c§lSua mina esta sendo criada, Aguarde alguns segundos.");
+                        player.getInventory().setItem(4, new CreatePickaxe(MySqlUtils.getPlayer(player)).setup());
+                        players.put(player.getUniqueId(), player);
+                        hidePlayer(player);
+                        new SendPlayerToSpawn(player);
                     }
                 }
                 catch (Exception es) {
@@ -88,80 +103,44 @@ public class ManagerInventory {
                 break;
             }
             case DIAMOND_PICKAXE: {
-                player.sendMessage(ChatColor.RED + "Em breve...");
                 player.closeInventory();
-                break;
+                try {
+                    new SkinInventory(MySqlUtils.getPlayer(player));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
 
-    private boolean ifItemInInventory(Player p) {
-        for (int i = 0; i < p.getInventory().getSize(); i++) {
-            if (p.getInventory().getItem(i) == null) {
-                return true;
-            }
+    private void hidePlayer(Player p) {
+        for (Player players : Bukkit.getOnlinePlayers()) {
+            players.hidePlayer(p);
         }
-        return false;
-    }
-    private int verifyEnchant(String enchant){
-        switch (enchant) {
-            case "fortuna":
-                return manager.getFortuna();
-            case "britadeira":
-                return manager.getBritadeira();
-            case "raio":
-                return manager.getRaio();
-            case "bonus":
-                return manager.getBonus();
-            case "laser":
-                return manager.getLaser();
-            case "explosao":
-                return manager.getExplosao();
-            case "multiplicador":
-                return manager.getMultiplicador();
-            case "velocidade":
-                return manager.getVelocidade();
-            case "xpbooster":
-                return manager.getXpbooster();
-        }
-        return 0;
-    }
-    private void setEnchant(String enchant, Integer lvl){
-        switch (enchant) {
-            case "fortuna":
-                manager.setFortuna(lvl);
-                break;
-            case "britadeira":
-                manager.setBritadeira(lvl);
-                break;
-            case "raio":
-                manager.setRaio(lvl);
-                break;
-            case "bonus":
-                manager.setBonus(lvl);
-                break;
-            case "laser":
-                manager.setLaser(lvl);
-                break;
-            case "explosao":
-                manager.setExplosao(lvl);
-                break;
-            case "multiplicador":
-                manager.setMultiplicador(lvl);
-                break;
-            case "velocidade":
-                manager.setVelocidade(lvl);
-                break;
-            case "xpbooster":
-                manager.setXpbooster(lvl);
-                break;
+        for (OfflinePlayer playertwo : Bukkit.getOfflinePlayers()) {
+            playertwo.getPlayer().hidePlayer(p);
         }
     }
+    private void unHide(Player p) {
+        for (Player players : Bukkit.getOnlinePlayers()) {
+            players.showPlayer(p);
+        }
+        for (OfflinePlayer playertwo : Bukkit.getOfflinePlayers()) {
+            playertwo.getPlayer().showPlayer(p);
+        }
+    }
+    private int verifyEnchant(String enchant) throws SQLException {
+        return SkinManagers.verifyEnchant(enchant, MySqlUtils.getPlayer(player));
+    }
+    private void setEnchant(String enchant, int level) throws SQLException {
+        SkinManagers.setEnchant(enchant, level, MySqlUtils.getPlayer(player));
+    }
+
     private int getInitialCost(String enchant){
-        return config.getInt("mina.enchants." + enchant + ".initial-cost");
+        return config.getInt("enchants." + enchant + ".initial-cost");
     }
-    private void onBuy(String enchant, String message) throws SQLException {
-        Integer cost = null;
+    private void onBuy(String enchant, String message) throws SQLException, IOException, InvalidConfigurationException {
+        Integer cost;
         cost = verifyEnchant(enchant) * getInitialCost(enchant);
 
         if (manager.getBlocks() >= cost) {

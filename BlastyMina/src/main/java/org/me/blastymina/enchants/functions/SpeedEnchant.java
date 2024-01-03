@@ -1,4 +1,4 @@
-package org.me.blastymina.enchants;
+package org.me.blastymina.enchants.functions;
 
 import org.bukkit.Bukkit;
 import org.bukkit.potion.PotionEffectType;

@@ -5,20 +5,19 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.me.blastymina.commands.MinaCommand;
 import org.me.blastymina.commands.SetLocationMina;
+import org.me.blastymina.configs.CustomFileConfiguration;
 import org.me.blastymina.database.MySqlConnector;
 import org.me.blastymina.events.onBlockBreak;
 import org.me.blastymina.events.onInventoryClick;
 import org.me.blastymina.events.onPlayerInteract;
 import org.me.blastymina.events.onPlayerJoin;
-import org.me.blastymina.utils.LocationConfig;
 import org.me.blastymina.utils.placeholder.BlastyExpansion;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 
@@ -32,7 +31,6 @@ extends JavaPlugin {
         manager = ProtocolLibrary.getProtocolManager();
         saveDefaultConfig();
         registerEvents();
-        verifyDependencies();
         try {
             new MySqlConnector();
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "MySQL carregado.");
@@ -40,15 +38,25 @@ extends JavaPlugin {
             throw new RuntimeException(e);
         }
         try {
-            new LocationConfig(instance);
+            reloadConfig();
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "Configurac\u0327o\u0303es carregadas.");
         } catch (Exception e) {
             e.printStackTrace();
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.RED + "Erro ao carregar as configurac\u0327o\u0303es.");
         }
+        try {
+            verifySections();
+        } catch (IOException | InvalidConfigurationException e) {
+            throw new RuntimeException(e);
+        }
         getCommand("mina").setExecutor(new MinaCommand());
-        getCommand("minaadm").setExecutor(new SetLocationMina());
+        try {
+            getCommand("minaadm").setExecutor(new SetLocationMina());
+        } catch (IOException | InvalidConfigurationException e) {
+            throw new RuntimeException(e);
+        }
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "Plugin carregado.");
+        verifyDependencies();
     }
 
     public static ProtocolManager getManager() {
@@ -79,8 +87,38 @@ extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
         else {
-            new BlastyExpansion(this).register();
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "Plugin 'PlaceholderAPI' encontrado.");
+            new BlastyExpansion(this).register();
+        }
+    }
+    private void verifySections() throws IOException, InvalidConfigurationException {
+        CustomFileConfiguration enchants = new CustomFileConfiguration("enchants.yml", this);
+        CustomFileConfiguration rewards = new CustomFileConfiguration("rewards.yml", this);
+        CustomFileConfiguration locations = new CustomFileConfiguration("locations.yml", this);
+        CustomFileConfiguration skins = new CustomFileConfiguration("skins.yml", this);
+        if (rewards.getConfigurationSection("rewards.itens") == null) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.RED + "Nenhuma recompensa foi configurada.");
+        }
+        else {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "Recompensas carregadas.");
+        }
+        if (enchants.getConfigurationSection("enchants") == null) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.RED + "Nenhum encantamento foi configurado.");
+        }
+        else {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "Encantamentos carregados.");
+        }
+        if (skins.getConfigurationSection("skins") == null) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.RED + "Nenhuma skin foi configurada.");
+        }
+        else {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "Skins carregadas.");
+        }
+        if (locations.getConfigurationSection("locations") == null) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.RED + "Nenhuma localiza\u00e7\u00e3o foi configurada.");
+        }
+        else {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "Localiza\u00e7\u00f5es carregadas.");
         }
     }
 }

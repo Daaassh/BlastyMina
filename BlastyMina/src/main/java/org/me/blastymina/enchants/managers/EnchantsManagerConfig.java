@@ -1,27 +1,30 @@
 package org.me.blastymina.enchants.managers;
 
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.me.blastymina.BlastyMina;
+import org.me.blastymina.configs.CustomFileConfiguration;
 import org.me.blastymina.utils.players.PlayerManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EnchantsManagerConfig {
     private PlayerManager manager;
     private String enchant;
-    private FileConfiguration config = BlastyMina.getPlugin(BlastyMina.class).getConfig();
+    private CustomFileConfiguration config = new CustomFileConfiguration("enchants.yml", BlastyMina.getPlugin(BlastyMina.class));
 
-    public EnchantsManagerConfig(PlayerManager manager, String enchant) {
+    public EnchantsManagerConfig(PlayerManager manager, String enchant) throws IOException, InvalidConfigurationException {
         this.manager = manager;
         this.enchant = enchant;
     }
     public String returnName(){
-        return ChatColor.translateAlternateColorCodes('&',config.getString("mina.enchants." + enchant + ".item.name"));
+        return ChatColor.translateAlternateColorCodes('&',config.getString("enchants." + enchant + ".item.name"));
     }
     public List<String> returnLore(){
-        List<String> lore = translateColors(config.getStringList("mina.enchants." + enchant + ".item.lore"));
+        List<String> lore = translateColors(config.getStringList("enchants." + enchant + ".item.lore"));
         replaceEnchants(lore);
         replaceMaxLevel(lore);
         return lore;
@@ -43,7 +46,7 @@ public class EnchantsManagerConfig {
     private List<String> replaceMaxLevel(List<String> input){
         for (int i = 0; i < input.size(); i++) {
             String elemento = input.get(i);
-            elemento = elemento.replace("{max_level}", getMaxLevel());
+            elemento = elemento.replace("@max_level", getMaxLevel());
             input.set(i, elemento);
         }
         return input;
@@ -73,6 +76,6 @@ public class EnchantsManagerConfig {
         return 0;
     }
     private String getMaxLevel(){
-        return String.valueOf(config.getInt("mina.enchants." + enchant + ".max-level"));
+        return String.valueOf(config.getInt("enchants." + enchant + ".max-level"));
     }
 }
