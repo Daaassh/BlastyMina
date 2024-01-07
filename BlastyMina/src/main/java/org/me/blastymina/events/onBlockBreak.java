@@ -29,6 +29,7 @@ import org.me.blastymina.enchants.specials.BritadeiraEnchant;
 import org.me.blastymina.enchants.specials.ExplosionEnchant;
 import org.me.blastymina.enchants.specials.LaserEnchant;
 import org.me.blastymina.enchants.specials.RaioEnchant;
+import org.me.blastymina.utils.mina.BlocksManager;
 import org.me.blastymina.utils.players.PlayerManager;
 import org.me.blastymina.utils.porcentage.PorcentageEnchantsManager;
 import org.me.blastymina.utils.porcentage.PorcentageManager;
@@ -82,6 +83,8 @@ implements Listener {
         if (playerManager != null) {
             new SpeedEnchant(MySqlUtils.getPlayer(p));
             new MultiplicadorEnchant(playerManager, 1);
+            playerManager.setBreakblocks(playerManager.getBreakblocks() + 1);
+            p.getItemInHand().getItemMeta().setDisplayName(ChatColor.translateAlternateColorCodes('&', BlastyMina.getPlugin(BlastyMina.class).getConfig().getString("mina.blocks.name") + " | " + playerManager.getBreakblocks()));
             playerManager.setXp(playerManager.getXP() + BlastyMina.getPlugin(BlastyMina.class).getConfig().getDouble("mina.blocks.xp-por-block"));
             playerManager.onUpXP();
             MySqlUtils.updatePlayer(playerManager, p);
@@ -99,14 +102,17 @@ implements Listener {
     }
 
     private void enchantsSetup(Player p, Block block) throws SQLException, IOException, InvalidConfigurationException {
-        if (new PorcentageEnchantsManager(10.0).setup()) {
+        if (new EnchantsManager(MySqlUtils.getPlayer(p), "britadeira").chanceOfEnchant()) {
+            new BritadeiraEnchant(p, block, MySqlUtils.getPlayer(p));
+        }
+        if (new EnchantsManager(MySqlUtils.getPlayer(p), "explosao").chanceOfEnchant()) {
             new ExplosionEnchant(p, block);
         }
-        else if (new PorcentageEnchantsManager(20.0).setup()) {
-            new BritadeiraEnchant(p, block);
-        }
-        else if (new PorcentageEnchantsManager(30.0).setup()) {
+        if (new EnchantsManager(MySqlUtils.getPlayer(p), "raio").chanceOfEnchant()) {
             new RaioEnchant(p, block);
+        }
+        if(new EnchantsManager(MySqlUtils.getPlayer(p), "laser").chanceOfEnchant()) {
+            new LaserEnchant(p);
         }
     }
 }

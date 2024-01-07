@@ -58,7 +58,7 @@ public class MySqlConnector {
     }
 
     private static void createUsersTable() throws SQLException {
-        String createTableQuery = "CREATE TABLE users (UUID VARCHAR(255), velocidade INT, xpbooster INT, blocks INT, xp DOUBLE, multiplicador INT, fortuna INT, britadeira INT, laser INT, raio INT, bonus INT, explosao INT, nivel INT, skin INT)";
+        String createTableQuery = "CREATE TABLE users (UUID VARCHAR(255), breakblocks INT,velocidade INT, xpbooster INT, blocks INT, xp DOUBLE, multiplicador INT, fortuna INT, britadeira INT, laser INT, raio INT, bonus INT, explosao INT, nivel INT, skin INT)";
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableQuery);
         }

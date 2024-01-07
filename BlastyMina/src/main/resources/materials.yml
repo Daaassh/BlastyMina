@@ -1,0 +1,11 @@
+blocks:
+  25:
+    type:
+      - DIAMOND_BLOCK
+      - STONE
+      - COBBLESTONE
+    probability:
+      - 0.01
+      - 0.09
+      - 0.1
+      - 0.5

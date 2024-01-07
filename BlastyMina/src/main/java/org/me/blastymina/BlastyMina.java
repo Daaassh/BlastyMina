@@ -96,6 +96,7 @@ extends JavaPlugin {
         CustomFileConfiguration rewards = new CustomFileConfiguration("rewards.yml", this);
         CustomFileConfiguration locations = new CustomFileConfiguration("locations.yml", this);
         CustomFileConfiguration skins = new CustomFileConfiguration("skins.yml", this);
+        CustomFileConfiguration materials = new CustomFileConfiguration("materials.yml", this);
         if (rewards.getConfigurationSection("rewards.itens") == null) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.RED + "Nenhuma recompensa foi configurada.");
         }
@@ -114,11 +115,17 @@ extends JavaPlugin {
         else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "Skins carregadas.");
         }
-        if (locations.getConfigurationSection("locations") == null) {
+        if (locations.getConfigurationSection("spawn") == null) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.RED + "Nenhuma localiza\u00e7\u00e3o foi configurada.");
         }
         else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "Localiza\u00e7\u00f5es carregadas.");
+        }
+        if (materials.getConfigurationSection("blocks") == null) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.RED + "Nenhum material foi configurado.");
+        }
+        else {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Blasty Mina ] " + ChatColor.GREEN + "Materiais carregados.");
         }
     }
 }

@@ -50,6 +50,7 @@ public class RaioEnchant {
             }
         new EnchantsRewardsManager(p, blocks, "raio");
         managers.setBlocks(managers.getBlocks() + blocks);
+        managers.setBreakblocks(managers.getBreakblocks() + blocks);
         MySqlUtils.updatePlayer(managers, p);
         p.sendMessage(ChatColor.RED + " Raio ativado, foram quebrados " + blocks + " blocos");
     }

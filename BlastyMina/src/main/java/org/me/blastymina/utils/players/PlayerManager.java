@@ -25,12 +25,14 @@ public class PlayerManager {
     private Integer multiplicador;
     private Integer velocidade;
     private Integer xpbooster;
+    private Integer breakblocks;
 
 
     private Map<UUID, Player> xpplayers = new HashMap<>();
 
-    public PlayerManager(Player player, Integer velocidade,Integer xpbooster,Integer multiplicador,Integer explosao,Integer blocks,Integer nivel, Double xp, Integer fortuna, Integer britadeira, Integer laser, Integer raio, Integer bonus, Integer skin) {
+    public PlayerManager(Player player, Integer breakblocks,Integer velocidade,Integer xpbooster,Integer multiplicador,Integer explosao,Integer blocks,Integer nivel, Double xp, Integer fortuna, Integer britadeira, Integer laser, Integer raio, Integer bonus, Integer skin) {
         this.player = player;
+        this.breakblocks = breakblocks;
         this.nivel = nivel;
         this.velocidade = velocidade;
         this.xpbooster = xpbooster;
@@ -44,6 +46,15 @@ public class PlayerManager {
         this.raio = raio;
         this.bonus = bonus;
         this.skin = skin;
+    }
+
+
+    public Integer getBreakblocks() {
+        return breakblocks;
+    }
+
+    public void setBreakblocks(Integer breakblocks) {
+        this.breakblocks = breakblocks;
     }
 
     public Integer getVelocidade() {

@@ -24,7 +24,7 @@ public class CreatePickaxe {
     public ItemStack setup(){
         ItemStack item = new ItemStack(verifySkin());
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', config.getString("mina.pickaxe.name")));
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', config.getString("mina.pickaxe.name") + " | " + manager.getBreakblocks()));
         meta.setLore(returnLore());
         try {
             meta.spigot().setUnbreakable(true);
@@ -54,6 +54,7 @@ public class CreatePickaxe {
         List<String> lore = translateColors(config.getStringList("mina.pickaxe.lore"));
         replaceEnchants(lore);
         replaceMaxLevel(lore);
+        replaceBlocksBreak(lore);
         return lore;
     }
 
@@ -69,15 +70,23 @@ public class CreatePickaxe {
     private void replaceMaxLevel(List<String> input) {
         for (int i = 0; i < input.size(); i++) {
             String elemento = input.get(i);
-            elemento = elemento.replace("{max_level}", getMaxLevel());
+            elemento = elemento.replace("@max_level", getMaxLevel());
             input.set(i, elemento);
         }
     }
+
     private List<String> translateColors(List<String> input) {
         for (int i = 0; i < input.size(); i++) {
             input.set(i, ChatColor.translateAlternateColorCodes('&', input.get(i)));
         }
         return input;
+    }
+    private void replaceBlocksBreak(List<String> input) {
+        for (int i = 0; i < input.size(); i++) {
+            String elemento = input.get(i);
+            elemento = elemento.replace("@blocks_break", String.valueOf(manager.getBreakblocks()));
+            input.set(i, elemento);
+        }
     }
 
     private List<String> getEnchantments() {

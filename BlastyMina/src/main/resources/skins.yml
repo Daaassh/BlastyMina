@@ -1,0 +1,49 @@
+skins:
+    '1':
+      name: '&cPicareta Inicial'
+      type: DIAMOND_PICKAXE
+      lore:
+      - Arroz e saudavel?
+      - Feijão tbm é mo daora
+    '2':
+      name: '&cPicareta Two'
+      type: GOLD_PICKAXE
+      lore:
+      - Arroz e saudavel?
+      - Feijão tbm é mo daora
+    '3':
+      name: '&cPicareta Third'
+      type: IRON_PICKAXE
+      lore:
+      - Arroz e saudavel?
+      - Feijão tbm é mo daora
+    '4':
+      name: '&cPicareta Four'
+      type: IRON_PICKAXE
+      lore:
+      - Arroz e saudavel?
+      - Feijão tbm é mo daora
+    '5':
+      name: '&cPicareta Five'
+      type: WOOD_PICKAXE
+      lore:
+      - Arroz e saudavel?
+      - Feijão tbm é mo daora
+    '6':
+      name: '&cPicareta Six'
+      type: IRON_PICKAXE
+      lore:
+      - Arroz e saudavel?
+      - Feijão tbm é mo daora
+    '7':
+      name: '&cPicareta Six'
+      type: IRON_PICKAXE
+      lore:
+      - Arroz e saudavel?
+      - Feijão tbm é mo daora
+    '8':
+      name: '&cPicareta Six'
+      type: IRON_PICKAXE
+      lore:
+      - Arroz e saudavel?
+      - Feijão tbm é mo daora

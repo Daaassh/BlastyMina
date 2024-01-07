@@ -125,10 +125,11 @@ implements CommandExecutor {
         return false;
     }
     private void setMina(Player p){
-        config.set("mina.location.mina.x", p.getLocation().getX());
-        config.set("mina.location.mina.y", p.getLocation().getY());
-        config.set("mina.location.mina.z", p.getLocation().getZ());
-        config.set("mina.location.mina.world", p.getLocation().getWorld().getName());
+        config.set("mina.x", p.getLocation().getX());
+        config.set("mina.y", p.getLocation().getY());
+        config.set("mina.z", p.getLocation().getZ());
+        config.set("mina.world", p.getLocation().getWorld().getName());
+        config.save();
     }
     private void setSpawn(Player p) {
         config.set("spawn.x", p.getLocation().getX());

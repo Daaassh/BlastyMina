@@ -63,7 +63,7 @@ public class ExplosionEnchant {
                         packet.getBlockPositionModifier().write(0, new BlockPosition(j, k, h));
                         packet.getBlockData().write(0, WrappedBlockData.createData(Material.AIR));
                         manager.sendServerPacket(p, packet);
-                        ++blocks;
+                        blocks++;
                     } catch (Exception e) {
                         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ Explosão ]" + ChatColor.RED +
                                 "Erro ao enviar o pacote do jogador " + p.getName() + ".");
@@ -73,6 +73,7 @@ public class ExplosionEnchant {
         }
         new EnchantsRewardsManager(p, blocks, "explosion");
         playerManager = MySqlUtils.getPlayer(p);
+        playerManager.setBreakblocks(playerManager.getBreakblocks() + blocks);
         playerManager.setBlocks(playerManager.getBlocks() + blocks);
         MySqlUtils.updatePlayer(playerManager, p);
         api.sendFullTitle(p, 3, 3, 5, ChatColor.YELLOW + "Explosão", "Ativado foram quebrados " + blocks + " blocos");

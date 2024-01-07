@@ -32,7 +32,7 @@ public class ManagerInventory {
     private final Player player;
     private final PlayerManager manager;
     private HashMap<UUID, Player> players = new HashMap<>();
-    private final CustomFileConfiguration config = new CustomFileConfiguration("config.yml", BlastyMina.getPlugin(BlastyMina.class));
+    private CustomFileConfiguration config = new CustomFileConfiguration("enchants.yml", BlastyMina.getPlugin(BlastyMina.class));
     TitleAPI api = new TitleAPI();
 
 
@@ -87,12 +87,12 @@ public class ManagerInventory {
                         players.remove(player.getUniqueId());
                     }
                     else {
+                        hidePlayer(player);
                         player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(20 * 10, 999));
                         new CuboidManager(player);
                         api.sendFullTitle(player, 5, 5, 15, "§c§lMina", "§c§lSua mina esta sendo criada, Aguarde alguns segundos.");
                         player.getInventory().setItem(4, new CreatePickaxe(MySqlUtils.getPlayer(player)).setup());
                         players.put(player.getUniqueId(), player);
-                        hidePlayer(player);
                         new SendPlayerToSpawn(player);
                     }
                 }
@@ -117,16 +117,11 @@ public class ManagerInventory {
         for (Player players : Bukkit.getOnlinePlayers()) {
             players.hidePlayer(p);
         }
-        for (OfflinePlayer playertwo : Bukkit.getOfflinePlayers()) {
-            playertwo.getPlayer().hidePlayer(p);
-        }
+
     }
     private void unHide(Player p) {
         for (Player players : Bukkit.getOnlinePlayers()) {
             players.showPlayer(p);
-        }
-        for (OfflinePlayer playertwo : Bukkit.getOfflinePlayers()) {
-            playertwo.getPlayer().showPlayer(p);
         }
     }
     private int verifyEnchant(String enchant) throws SQLException {
@@ -139,19 +134,25 @@ public class ManagerInventory {
     private int getInitialCost(String enchant){
         return config.getInt("enchants." + enchant + ".initial-cost");
     }
+    private int getMaxLevel(String enchant){
+        return config.getInt("enchants." + enchant + ".max-level");
+    }
     private void onBuy(String enchant, String message) throws SQLException, IOException, InvalidConfigurationException {
-        Integer cost;
-        cost = verifyEnchant(enchant) * getInitialCost(enchant);
-
-        if (manager.getBlocks() >= cost) {
-            manager.setBlocks(manager.getBlocks() - cost);
-            api.sendTitle(player, 5, 5, 10, "§6§l" + message, "§6§lEvoluida para o nivel: " + verifyEnchant(enchant));
-            setEnchant(enchant,  verifyEnchant(enchant) + 1);
-            player.closeInventory();
-            new PickaxeInventory(MySqlUtils.getPlayer(player));
+        if (!(verifyEnchant(enchant) == getMaxLevel(enchant))) {
+            Integer cost;
+            cost = verifyEnchant(enchant) * getInitialCost(enchant);
+            if (manager.getBlocks() >= cost) {
+                manager.setBlocks(manager.getBlocks() - cost);
+                api.sendTitle(player, 5, 5, 10, "§6§l" + message, "§6§lEvoluida para o nivel: " + verifyEnchant(enchant));
+                setEnchant(enchant, verifyEnchant(enchant) + 1);
+                player.closeInventory();
+                new PickaxeInventory(MySqlUtils.getPlayer(player));
+            } else {
+                player.sendMessage(ChatColor.RED + "Voce precisa de " + cost + " blocos para evoluir para o nivel " + verifyEnchant(enchant) + 1);
+            }
         }
         else {
-            player.sendMessage(ChatColor.RED + "Voce precisa de " + cost + " blocos para evoluir para o nivel " + verifyEnchant(enchant) + 1);
+            player.sendMessage(ChatColor.RED + "O nivel maximo do enchant " + enchant + " ja foi atingido.");
         }
 
     }

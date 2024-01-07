@@ -28,23 +28,24 @@ public class MySqlUtils {
     }
 
     public static void savePlayer(Player p) throws SQLException {
-        String query = "INSERT INTO users (uuid, velocidade,xpbooster,blocks,multiplicador,explosao,nivel, xp, fortuna, britadeira,laser,raio,bonus, skin) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String query = "INSERT INTO users (uuid, breakblocks,velocidade,xpbooster,blocks,multiplicador,explosao,nivel, xp, fortuna, britadeira,laser,raio,bonus, skin) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
         try {
             PreparedStatement collection = connection.prepareStatement(query);
             collection.setString(1, String.valueOf(p.getUniqueId()));
             collection.setInt(2, 1);
-            collection.setInt(3, 0);
-            collection.setInt(4, 1);
+            collection.setInt(3, 1);
+            collection.setInt(4, 0);
             collection.setInt(5, 1);
-            collection.setInt(6, 0);
-            collection.setInt(7, 1);
-            collection.setDouble(8, 1.0);
-            collection.setInt(9, 1);
-            collection.setInt(10, 0);
+            collection.setInt(6, 1);
+            collection.setInt(7, 0);
+            collection.setInt(8, 1);
+            collection.setDouble(9, 1.0);
+            collection.setInt(10, 1);
             collection.setInt(11, 0);
             collection.setInt(12, 0);
             collection.setInt(13, 0);
-            collection.setInt(14,1);
+            collection.setInt(14, 0);
+            collection.setInt(15,1);
             collection.executeUpdate();
             collection.close();
         } catch (SQLException e) {
@@ -54,23 +55,24 @@ public class MySqlUtils {
     }
 
     public static void updatePlayer(PlayerManager manager, Player p) {
-        String query = "UPDATE users SET blocks = ?, velocidade = ?,xpbooster = ?,multiplicador = ?, explosao = ?, nivel = ?, xp = ?, fortuna = ?, britadeira = ? ,laser = ?,raio = ?, bonus = ?, skin = ? WHERE uuid = ?";
+        String query = "UPDATE users SET blocks = ?, velocidade = ?, breakblocks = ?,xpbooster = ?,multiplicador = ?, explosao = ?, nivel = ?, xp = ?, fortuna = ?, britadeira = ? ,laser = ?,raio = ?, bonus = ?, skin = ? WHERE uuid = ?";
         try {
             PreparedStatement collection = connection.prepareStatement(query);
             collection.setInt(1, manager.getBlocks());
             collection.setInt(2, manager.getVelocidade());
-            collection.setInt(3, manager.getXpbooster());
-            collection.setInt(4, manager.getMultiplicador());
-            collection.setInt(5, manager.getExplosao());
-            collection.setInt(6, manager.getNivel());
-            collection.setDouble(7, manager.getXP());
-            collection.setInt(8, manager.getFortuna());
-            collection.setInt(9, manager.getBritadeira());
-            collection.setInt(10, manager.getLaser());
-            collection.setInt(11, manager.getRaio());
-            collection.setInt(12, manager.getBonus());
-            collection.setInt(13, manager.getSkin());
-            collection.setString(14, String.valueOf(manager.getPlayer().getUniqueId()));
+            collection.setInt(3, manager.getBreakblocks());
+            collection.setInt(4, manager.getXpbooster());
+            collection.setInt(5, manager.getMultiplicador());
+            collection.setInt(6, manager.getExplosao());
+            collection.setInt(7, manager.getNivel());
+            collection.setDouble(8, manager.getXP());
+            collection.setInt(9, manager.getFortuna());
+            collection.setInt(10, manager.getBritadeira());
+            collection.setInt(11, manager.getLaser());
+            collection.setInt(12, manager.getRaio());
+            collection.setInt(13, manager.getBonus());
+            collection.setInt(14, manager.getSkin());
+            collection.setString(15, String.valueOf(manager.getPlayer().getUniqueId()));
             collection.executeUpdate();
         } catch (SQLException e) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[ MySQL ] Erro ao salvar o jogador " + p.getName() + " no banco de dados!");
@@ -88,6 +90,7 @@ public class MySqlUtils {
             try (ResultSet results = statement.executeQuery()) {
                 if (results.next()) {
                     int nivel = results.getInt("nivel");
+                    int breakblocks = results.getInt("breakblocks");
                     int velocidade = results.getInt("velocidade");
                     int xpbooster = results.getInt("xpbooster");
                     int multiplicador = results.getInt("multiplicador");
@@ -100,7 +103,7 @@ public class MySqlUtils {
                     int raio = results.getInt("raio");
                     int bonus = results.getInt("bonus");
                     int skin = results.getInt("skin");
-                    manager = new PlayerManager(player, velocidade,xpbooster,multiplicador,explosao,blocks,nivel, xp, fortuna, britadeira, laser, raio, bonus, skin);
+                    manager = new PlayerManager(player, breakblocks,velocidade,xpbooster,multiplicador,explosao,blocks,nivel, xp, fortuna, britadeira, laser, raio, bonus, skin);
                 } else {
                     Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "[ MySQL ] " + ChatColor.RED + "Nenhuma informação encontrada para o jogador " + player.getName());
                 }

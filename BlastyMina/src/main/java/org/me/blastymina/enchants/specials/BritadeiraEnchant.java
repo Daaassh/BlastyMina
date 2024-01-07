@@ -34,8 +34,9 @@ public class BritadeiraEnchant {
     private CustomFileConfiguration config = new CustomFileConfiguration("enchants.yml", BlastyMina.getPlugin(BlastyMina.class));
 
 
-    public BritadeiraEnchant(Player p, Block block) throws SQLException, IOException, InvalidConfigurationException {
+    public BritadeiraEnchant(Player p, Block block, PlayerManager playerManager) throws SQLException, IOException, InvalidConfigurationException {
         this.block = block;
+        this.playerManager = playerManager;
         this.p = p;
         packetSend();
     }
@@ -71,9 +72,10 @@ public class BritadeiraEnchant {
             }
         }
         playerManager.setBlocks(playerManager.getBlocks() + blocks);
-        new EnchantsRewardsManager(p, blocks, "britadeira");
+        playerManager.setBreakblocks(playerManager.getBreakblocks() + blocks);
         MySqlUtils.updatePlayer(playerManager, p);
         api.sendFullTitle(p, 3, 3, 5, ChatColor.YELLOW + "Britadeira", "Ativado foram quebrados " + blocks + " blocos");
+        new EnchantsRewardsManager(p, blocks, "britadeira");
     }
 }
 

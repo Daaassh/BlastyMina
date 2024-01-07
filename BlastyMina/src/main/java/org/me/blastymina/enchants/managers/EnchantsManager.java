@@ -26,7 +26,7 @@ public class EnchantsManager {
     }
 
     public boolean chanceOfEnchant() {
-        double percentage = manager.getBritadeira() * config.getDouble("enchants." + enchant + ".initial-percentage");
+        double percentage = verifyEnchant(enchant) * config.getDouble("enchants." + enchant + ".initial-percentage");
         return new PorcentageEnchantsManager(percentage).setup();
     }
 

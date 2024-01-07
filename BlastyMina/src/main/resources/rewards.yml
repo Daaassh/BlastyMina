@@ -1,0 +1,13 @@
+rewards:
+    chance: 100
+    itens:
+      '1':
+        name: Nome Mt daora
+        chance: 0.0001
+        id: 1
+        lore:
+        - Arroz e saudavel?
+        - Feijão tbm é mo daora
+        commands:
+          usage: true
+          command: give {player} minecraft:diamond 2
